@@ -1,0 +1,127 @@
+# ======================================
+#    English localization JailPlus (MiniMessage)
+# ======================================
+
+# Common messages
+prefix: "<gray>[<gold>JailPlus<gray>]</gray>"
+no-permission: "{prefix}<red>You don't have permission to execute this command!</red>"
+command-not-found: "{prefix}<red>Command not found!</red>"
+player-not-found: "{prefix}<red>Player <yellow>{0}</yellow> not found!</red>"
+reload-success: "{prefix}<green>Configuration successfully reloaded!</green>"
+
+# Jail commands
+jail:
+  usage: "{prefix}<red>Usage: <yellow>/jail player <player> [time] [reason]</yellow></red>"
+  already-jailed: "{prefix}<red>Player <yellow>{0}</yellow> is already jailed!</red>"
+  invalid-time: "{prefix}<red>Invalid jail time!</red>"
+  invalid-time-format: "{prefix}<red>Invalid time format! Use: 30s, 5m, 2h, 1d</red>"
+  time-too-long: "{prefix}<red>Maximum jail time: <yellow>{0}</yellow></red>"
+  no-available-jails: "{prefix}<red>No available jails!</red>"
+  success: "{prefix}<green>Player <yellow>{0}</yellow> jailed for <yellow>{1}</yellow> reason: <yellow>{2}</yellow></green>"
+  failed: "{prefix}<red>Failed to jail player <yellow>{0}</yellow></red>"
+
+  # Messages for prisoner
+  jailed: "{prefix}<red>You have been jailed in <yellow>{0}</yellow> for <yellow>{1}</yellow> reason: <yellow>{2}</yellow></red>"
+  unjailed: "{prefix}<green>You have been released from jail!</green>"
+  login-message: "{prefix}<red>You are in jail <yellow>{0}</yellow><red>. Time remaining: <yellow>{1}</yellow><red>. Reason: <yellow>{2}</yellow></red>"
+
+  # Broadcast messages
+  broadcast: "{prefix}<yellow>{0}</yellow> <red>has been jailed for <yellow>{2}</yellow> reason: <yellow>{1}</yellow></red>"
+  unjail-broadcast: "{prefix}<yellow>{0}</yellow> <green>has been released from jail!</green>"
+
+  # Restrictions
+  command-blocked: "{prefix}<red>You cannot use commands in jail!</red>"
+  teleport-blocked: "{prefix}<red>You cannot teleport in jail!</red>"
+  action-blocked: "{prefix}<red>You cannot perform this action in jail!</red>"
+  pvp-blocked: "{prefix}<red>You cannot fight in jail!</red>"
+  inventory-blocked: "{prefix}<red>You cannot open inventories in jail!</red>"
+  cannot-attack-prisoner: "{prefix}<red>You cannot attack a prisoner!</red>"
+
+  # Chat prefix
+  chat-prefix: "<gray>[<red>PRISONER</red>]</gray>"
+
+  # Lists and info
+  list-empty: "{prefix}<yellow>No one is currently jailed.</yellow>"
+  list-header: "{prefix}<gold>=== Jailed Players List ===</gold>"
+  list-entry: "{prefix}<yellow>{0} <gray>- Jail: <white>{1} <gray>- Time: <white>{2} <gray>- Reason: <white>{3}</white></gray></yellow>"
+
+  not-jailed: "{prefix}<red>Player <yellow>{0}</yellow> is not jailed!</red>"
+  you-not-jailed: "{prefix}<red>You not jailed!</red>"
+  info-usage: "{prefix}<red>Usage: <yellow>/jail info <player></yellow></red>"
+  info: |
+    <gold>=== Prisoner Information ===</gold>
+    <yellow>Player: <white>{0}</white></yellow>
+    <yellow>Jail: <white>{1}</white></yellow>
+    <yellow>Time remaining: <white>{2}</white></yellow>
+    <yellow>Reason: <white>{3}</white></yellow>
+    <yellow>Jailed by: <white>{4}</white></yellow>
+  your-info: |
+    <red>=== Your Jail Information ===</red>
+    <yellow>Jail: <white>{0}</white></yellow>
+    <yellow>Time remaining: <white>{1}</white></yellow>
+    <yellow>Reason: <white>{2}</white></yellow>
+    <yellow>Jailed by: <white>{3}</white></yellow>
+    <gray>Use <yellow>/jail info</yellow> <gray>to check your jail status</gray>
+
+  # Time management
+  time-usage: "{prefix}<red>Usage: <yellow>/jail time <player> <add/remove/set> <time></yellow></red>"
+  time-added: "{prefix}<green>Added <yellow>{1}</yellow> jail time for player <yellow>{0}</yellow></green>"
+  time-removed: "{prefix}<green>Removed <yellow>{1}</yellow> jail time for player <yellow>{0}</yellow></green>"
+  time-set: "{prefix}<green>Jail time for player <yellow>{0}</yellow> set to <yellow>{1}</yellow></green>"
+
+  # Help
+  help-header: "<gold>=== JailPlus Commands Help ===</gold>"
+  help-jail: "<yellow>/jail player <player> [time] [reason] <gray>- Jail a player</gray>"
+  help-list: "<yellow>/jail list <gray>- List jailed players</gray>"
+  help-info: "<yellow>/jail info <player> <gray>- Prisoner information</gray>"
+
+# Unjail commands
+unjail:
+  usage: "{prefix}<red>Usage: <yellow>/unjail <player></yellow></red>"
+  success: "{prefix}<green>Player <yellow>{0}</yellow> successfully released!</green>"
+  failed: "{prefix}<red>Failed to release player <yellow>{0}</yellow></red>"
+  not-found: "{prefix}<red>Prisoner named <yellow>{0}</yellow> not found!</red>"
+
+# Admin commands
+admin:
+  player-only: "{prefix}<red>This command is only available to players!</red>"
+  unknown-command: "{prefix}<red>Unknown command: <yellow>{0}</yellow></red>"
+
+  # Jail creation
+  create-usage: "{prefix}<red>Usage: <yellow>/jailadmin create <name></yellow></red>"
+  jail-exists: "{prefix}<red>Jail named <yellow>{0}</yellow> already exists!</red>"
+  jail-created: "{prefix}<green>Jail <yellow>{0}</yellow> successfully created!</green>"
+  jail-create-failed: "{prefix}<red>Failed to create jail <yellow>{0}</yellow></red>"
+
+  # Jail deletion
+  delete-usage: "{prefix}<red>Usage: <yellow>/jailadmin delete <name></yellow></red>"
+  jail-not-exists: "{prefix}<red>Jail named <yellow>{0}</yellow> does not exist!</red>"
+  jail-deleted: "{prefix}<green>Jail <yellow>{0}</yellow> successfully deleted!</green>"
+  jail-delete-failed: "{prefix}<red>Failed to delete jail <yellow>{0}</yellow></red>"
+
+  # Jail list
+  no-jails: "{prefix}<yellow>No jails created.</yellow>"
+  jails-header: "<gold>=== Jails List ===</gold>"
+  jail-entry: "<yellow>{0}</yellow> <gray>-</gray> World: <white>{1} <gray>-</gray> Cords: <white>{2}, {3}, {4} Prisoners: <white>{5}</white>"
+
+  # Jail info
+  info-usage: "{prefix}<red>Usage: <yellow>/jailadmin info <name></yellow></red>"
+  jail-info: |
+    <gold>=== Jail Information ===</gold>
+    <yellow>Name: <white>{0}</white></yellow>
+    <yellow>World: <white>{1}</white></yellow>
+    <yellow>Coordinates: <white>{2}, {3}, {4}</white></yellow>
+    <yellow>Prisoners: <white>{7}</white></yellow>
+
+  # Reload
+  reload-success: "{prefix}<green>Plugin successfully reloaded in <yellow>{0}ms</yellow>!</green>"
+  reload-failed: "{prefix}<red>Error during reload: <yellow>{0}</yellow></red>"
+
+  # Help
+  help-header: "<gold>=== Admin Commands Help ===</gold>"
+  help-create: "<yellow>/jailadmin create <name> <gray>- Create jail</gray>"
+  help-delete: "<yellow>/jailadmin delete <name> <gray>- Delete jail</gray>"
+  help-list: "<yellow>/jailadmin list <gray>- List jails</gray>"
+  help-info: "<yellow>/jailadmin info <name> <gray>- Jail information</gray>"
+  help-reload: "<yellow>/jailadmin reload <gray>- Reload plugin</gray>"
+  help-time: "<yellow>/jailadmin time <player> <add/remove/set> <time> <gray>- Manage jail time</gray>"

@@ -1,0 +1,125 @@
+name: JailPlus
+version: '0.0.1-SNAPSHOT'
+main: org.misqzy.jailPlus.JailPlus
+api-version: '1.21'
+author: MISQZY
+
+depend: []
+softdepend: [Vault, PlaceholderAPI]
+
+commands:
+  jail:
+    description: Jail plauer
+    usage: /<command> <player> [time] [reason] | /<command> list | /<command> info <player>
+    permission: jailplus.jail
+    aliases: [j]
+
+  unjail:
+    description: Unjail player
+    usage: /<command> <player>
+    permission: jailplus.unjail
+    aliases: [uj, free]
+
+  jailadmin:
+    description: Admin commands
+    usage: /<command> <subcommand>
+    permission: jailplus.admin
+    aliases: [ja, jadmin]
+
+permissions:
+  jailplus.*:
+    description: Access to all JailPlus commands
+    children:
+      jailplus.jail.*: true
+      jailplus.unjail: true
+      jailplus.admin.*: true
+      jailplus.reload: true
+    default: op
+
+  jailplus.jail:
+    description: Access to jail command
+    default: true
+
+  jailplus.jail.*:
+    description: Access to all jail commands
+    children:
+      jailplus.jail.player: true
+      jailplus.jail.list: true
+      jailplus.jail.info.*: true
+    default: op
+
+  jailplus.jail.player:
+    description: Access to jail player
+    default: op
+
+  jailplus.jail.list:
+    description: Access to jail list
+    default: true
+
+  jailplus.jail.info:
+    description: Access to jail info command
+    default: true
+
+  jailplus.jail.info.*:
+    description: Access to all jail info commands
+    children:
+      jailplus.jail.info: true
+      jailplus.jail.info.own: true
+      jailplus.jail.info.other: true
+    default: op
+
+  jailplus.jail.info.own:
+    description: Access to display own jail time
+    default: true
+
+  jailplus.jail.info.other:
+    description: Access to display other player jail time
+    default: op
+
+  jailplus.unjail:
+    description: Access to unjail player
+    default: op
+
+  jailplus.admin:
+    description: Access to admin command
+    default: false
+
+  jailplus.admin.*:
+    description: Access to all admin functions
+    children:
+      jailplus.admin: true
+      jailplus.admin.time: true
+      jailplus.admin.create: true
+      jailplus.admin.delete: true
+      jailplus.admin.info: true
+      jailplus.admin.list: true
+    default: op
+
+  jailplus.admin.create:
+    description: Access to create jail
+    default: op
+
+  jailplus.admin.delete:
+    description: Access to delete jail
+    default: op
+
+  jailplus.admin.info:
+    description: Access to info about jail
+    default: op
+
+  jailplus.admin.list:
+    description: Access to jail list
+    default: op
+
+  jailplus.admin.time:
+    description: Access to manage prisoner time command
+    default: op
+
+  jailplus.bypass:
+    description: Jail bypass
+    default: false
+
+  jailplus.reload:
+    description: Reload plugin
+    default: op
+

@@ -1,0 +1,24 @@
+# ======================================
+#         JailPlus Configuration
+# ======================================
+
+
+locale: "en"
+
+use-prefix: true
+
+max-jail-time: 86400
+
+broadcast-jail: true
+broadcast-unjail: true
+
+prevent-command-usage: true
+
+# Command whitelist when player is jailed
+unblocked-commands:
+  - "tell"
+  - "say"
+  - "msg"
+  - "server"
+
+debug: false
