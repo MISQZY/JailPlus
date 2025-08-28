@@ -111,7 +111,7 @@ admin:
     <yellow>Name: <white>{0}</white></yellow>
     <yellow>World: <white>{1}</white></yellow>
     <yellow>Coordinates: <white>{2}, {3}, {4}</white></yellow>
-    <yellow>Prisoners: <white>{7}</white></yellow>
+    <yellow>Prisoners: <white>{5}</white></yellow>
 
   # Reload
   reload-success: "{prefix}<green>Plugin successfully reloaded in <yellow>{0}ms</yellow>!</green>"

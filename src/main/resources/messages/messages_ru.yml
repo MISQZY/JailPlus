@@ -96,9 +96,7 @@ admin:
     <yellow>Название: <white>{0}</white></yellow>
     <yellow>Мир: <white>{1}</white></yellow>
     <yellow>Координаты: <white>{2}, {3}, {4}</white></yellow>
-    <yellow>Статус: <white>{5}</white></yellow>
-    <yellow>Доступность: <white>{6}</white></yellow>
-    <yellow>Заключенных: <white>{7}</white></yellow>
+    <yellow>Заключенных: <white>{5}</white></yellow>
 
   reload-success: "{prefix}<green>Плагин успешно перезагружен за <yellow>{0}</yellow>мс!</green>"
   reload-failed: "{prefix}<red>Ошибка при перезагрузке: <yellow>{0}</yellow></red>"

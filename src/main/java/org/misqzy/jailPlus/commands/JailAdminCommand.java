@@ -157,12 +157,18 @@ public class JailAdminCommand implements CommandExecutor, TabCompleter {
         localizationManager.sendMessage(sender, "admin.jails-header");
 
         for (JailData jail : jailManager.getAllJails()) {
+
+            long prisonersCount = jailManager.getAllJailedPlayers().stream()
+                    .filter(data -> data.getJailName().equals(jail.getName()))
+                    .count();
+
             localizationManager.sendMessage(sender, "admin.jail-entry",
                     jail.getName(),
                     jail.getWorldName(),
                     (int) jail.getX(),
                     (int) jail.getY(),
-                    (int) jail.getZ()
+                    (int) jail.getZ(),
+                    prisonersCount
             );
         }
     }
