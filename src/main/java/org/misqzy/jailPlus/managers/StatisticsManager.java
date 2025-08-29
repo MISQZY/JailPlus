@@ -27,7 +27,7 @@ public class StatisticsManager {
             try {
                 statisticsFile.createNewFile();
             } catch (IOException e) {
-                plugin.getLogger().log(Level.SEVERE, "Could not create statistics.yml", e);
+                plugin.getLogger().severe( "Could not create statistics.yml: " + e);
             }
         }
 
@@ -57,7 +57,7 @@ public class StatisticsManager {
             }
         }
 
-        plugin.getLogger().info("Loaded statistics for " + cache.size() + " players");
+        plugin.getLogger().fine("Loaded statistics for " + cache.size() + " players");
     }
 
     public void addJailRecord(UUID playerUuid, long jailTime, String reason) {

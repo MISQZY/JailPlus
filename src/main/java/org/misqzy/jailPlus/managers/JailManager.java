@@ -63,7 +63,7 @@ public class JailManager {
             try {
                 jailsFile.createNewFile();
             } catch (IOException e) {
-                plugin.getLogger().log(Level.SEVERE, "Error creating jails.yml", e);
+                plugin.getLogger().severe("Error creating jails.yml: " + e);
             }
         }
 
@@ -71,7 +71,7 @@ public class JailManager {
             try {
                 playersFile.createNewFile();
             } catch (IOException e) {
-                plugin.getLogger().log(Level.SEVERE, "Error creating players.yml", e);
+                plugin.getLogger().severe("Error creating players.yml: " + e);
             }
         }
 
@@ -105,7 +105,7 @@ public class JailManager {
             jails.put(jailName.toLowerCase(), jail);
         }
 
-        plugin.getLogger().info("Loaded " + jails.size() + " jails");
+        plugin.getLogger().fine("Loaded " + jails.size() + " jails");
     }
 
     private void loadJailedPlayers() {

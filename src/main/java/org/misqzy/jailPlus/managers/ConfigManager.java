@@ -32,12 +32,7 @@ public class ConfigManager {
         plugin.saveDefaultConfig();
 
         configFile = new File(plugin.getDataFolder(), "config.yml");
-        config = YamlConfiguration.loadConfiguration(configFile);
-
-        if (isDebugEnabled())
-            plugin.getLogger().setLevel(Level.FINE);
-        else
-            plugin.getLogger().setLevel(Level.INFO);
+        loadConfig();
 
         setDefaults();
         saveConfig();
@@ -105,10 +100,17 @@ public class ConfigManager {
 
     public void reloadConfig() {
         try {
-            config = YamlConfiguration.loadConfiguration(configFile);
+            loadConfig();
             plugin.getLogger().info("Configuration reloaded successfully!");
+
+            if (isDebugEnabled()) {
+                plugin.getLogger().setLevel(Level.FINE);
+            } else {
+                plugin.getLogger().setLevel(Level.INFO);
+            }
+
         } catch (Exception e) {
-            plugin.getLogger().log(Level.SEVERE, "Error when trying to reload configuration!", e);
+            plugin.getLogger().severe("Error when trying to reload configuration: " + e);
         }
     }
 
@@ -116,7 +118,17 @@ public class ConfigManager {
         try {
             config.save(configFile);
         } catch (IOException e) {
-            plugin.getLogger().log(Level.SEVERE, "Error when trying to save configuration!", e);
+            plugin.getLogger().severe( "Error when trying to save configuration: " + e);
+        }
+    }
+
+    public void loadConfig() {
+        config = YamlConfiguration.loadConfiguration(configFile);
+
+        if (isDebugEnabled()) {
+            plugin.getLogger().setLevel(Level.FINE);
+        } else {
+            plugin.getLogger().setLevel(Level.INFO);
         }
     }
 

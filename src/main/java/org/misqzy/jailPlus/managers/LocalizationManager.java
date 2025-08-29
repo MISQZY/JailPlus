@@ -81,10 +81,10 @@ public class LocalizationManager {
             }
 
             messages.put(language, messageConfig);
-            plugin.getLogger().info("Loaded " + language + " localization with mixed format support");
+            plugin.getLogger().fine("Loaded " + language + " localization with mixed format support");
 
         } catch (Exception e) {
-            plugin.getLogger().log(Level.SEVERE, "Error loading language file: " + language, e);
+            plugin.getLogger().severe("Error loading " + language + " language file: " + e);
         }
     }
 
@@ -116,7 +116,7 @@ public class LocalizationManager {
             boolean hasMiniMessage = MINI_MESSAGE_PATTERN.matcher(message).find();
 
             if (configManager.isDebugEnabled()) {
-                plugin.getLogger().info("Parsing message: '" + message + "' (Legacy: " + hasLegacy + ", MiniMessage: " + hasMiniMessage + ")");
+                plugin.getLogger().fine("LocalizationManager parse message " + message + " (Legacy: " + hasLegacy + ", MiniMessage: " + hasMiniMessage + ")");
             }
 
             Component result;

@@ -31,7 +31,7 @@ public final class JailPlus extends JavaPlugin {
         startupTime = System.currentTimeMillis();
         instance = this;
 
-        getLogger().info("Author: " + getDescription().getAuthors().toString() + " Version: " + getDescription().getVersion());
+        getLogger().fine("Author: " + getDescription().getAuthors().toString() + " Version: " + getDescription().getVersion());
 
         try {
             if (!initializeManagers()) {
@@ -53,15 +53,13 @@ public final class JailPlus extends JavaPlugin {
             }
 
         } catch (Exception e) {
-            getLogger().log(Level.SEVERE, "Critical error while starting plugin:", e);
+            getLogger().severe("Critical error while starting plugin: " + e);
             getServer().getPluginManager().disablePlugin(this);
         }
     }
 
     @Override
     public void onDisable() {
-        getLogger().info("JailPlus disabling...");
-
         try {
             if (jailManager != null) {
                 jailManager.shutdown();
@@ -82,14 +80,14 @@ public final class JailPlus extends JavaPlugin {
             getLogger().info("JailPlus successfully disabled!");
 
         } catch (Exception e) {
-            getLogger().log(Level.SEVERE,"Error on plugin disabling:", e);
+            getLogger().severe("Error on plugin disabling: " + e);
         }
     }
 
 
     private boolean initializeManagers() {
         try {
-            getLogger().info("Manager initialization...");
+            getLogger().fine("Manager initialization...");
 
             // Core managers
             configManager = new ConfigManager(this);
@@ -99,7 +97,7 @@ public final class JailPlus extends JavaPlugin {
             // Advanced managers
             try {
                 placeholderManager = new PlaceholderManager(this);
-                getLogger().info("PlaceholderManager initialized");
+                getLogger().fine("PlaceholderManager initialized");
             } catch (Exception e) {
                 getLogger().warning("Can't get access to PlaceholderManager: " + e.getMessage());
             }
@@ -107,7 +105,7 @@ public final class JailPlus extends JavaPlugin {
             try {
                 if (configManager.isStatisticsEnabled()) {
                     statisticsManager = new StatisticsManager(this);
-                    getLogger().info("StatisticsManager initialized");
+                    getLogger().fine("StatisticsManager initialized");
                 }
             } catch (Exception e) {
                 getLogger().warning("Can't get access to StatisticsManager: " + e.getMessage());
@@ -116,17 +114,17 @@ public final class JailPlus extends JavaPlugin {
             try {
                 if (configManager.isLoggingEnabled()) {
                     logManager = new LogManager(this);
-                    getLogger().info("LogManager initialized");
+                    getLogger().fine("LogManager initialized");
                 }
             } catch (Exception e) {
                 getLogger().warning("Can't get access to  LogManager: " + e.getMessage());
             }
 
-            getLogger().info("All managers successfully initialized!");
+            getLogger().fine("All managers successfully initialized!");
             return true;
 
         } catch (Exception e) {
-            getLogger().log(Level.SEVERE, "Manager initialization error:", e);
+            getLogger().severe("Manager initialization error: " + e);
             return false;
         }
     }
@@ -141,9 +139,9 @@ public final class JailPlus extends JavaPlugin {
             Objects.requireNonNull(getCommand("jailadmin"))
                     .setExecutor(new JailAdminCommand(this, jailManager, configManager, localizationManager));
 
-            getLogger().info("Commands registered");
+            getLogger().fine("Commands registered");
         } catch (Exception e) {
-            getLogger().log(Level.SEVERE, "Command registration error", e);
+            getLogger().severe("Command registration error: " +  e);
             throw e;
         }
     }
@@ -154,9 +152,9 @@ public final class JailPlus extends JavaPlugin {
             getServer().getPluginManager().registerEvents(
                     new PlayerListener(jailManager, localizationManager, configManager), this
             );
-            getLogger().info("Event handlers registered");
+            getLogger().fine("Event handlers registered");
         } catch (Exception e) {
-            getLogger().log(Level.SEVERE, "Error registering handlers:", e);
+            getLogger().severe("Error registering handlers: " + e);
             throw e;
         }
     }
@@ -187,10 +185,10 @@ public final class JailPlus extends JavaPlugin {
             }
 
             long reloadTime = System.currentTimeMillis() - reloadStart;
-            getLogger().info("JailPlus Enhanced reloaded for " + reloadTime + "ms!");
+            getLogger().info("JailPlus reloaded for " + reloadTime + "ms!");
 
         } catch (Exception e) {
-            getLogger().log(Level.SEVERE,"Error while reloading plugin:", e);
+            getLogger().severe("Error while reloading plugin: " + e);
             throw new RuntimeException("Reload error", e);
         }
     }
@@ -199,7 +197,6 @@ public final class JailPlus extends JavaPlugin {
     private void logStartupInfo() {
         long startupDuration = System.currentTimeMillis() - startupTime;
 
-        getLogger().info("Load time: " + startupDuration + "ms");
         getLogger().fine("Jails loaded: " + jailManager.getAllJails().size());
         getLogger().fine("Prisoners: " + jailManager.getAllJailedPlayers().size());
 
@@ -220,14 +217,14 @@ public final class JailPlus extends JavaPlugin {
         }
 
         if (statisticsManager != null) {
-            getLogger().info("Statistic: Enabled");
+            getLogger().fine("Statistic: Enabled");
         }
 
         if (logManager != null) {
-            getLogger().info("Logging: Enabled");
+            getLogger().fine("Logging: Enabled");
         }
 
-        getLogger().info("JailPlus successfully started!");
+        getLogger().info("JailPlus successfully enabled! (took " + startupDuration + "ms)");
     }
 
 

@@ -32,7 +32,7 @@ public class LogManager {
             try {
                 logsFile.createNewFile();
             } catch (IOException e) {
-                plugin.getLogger().log(Level.SEVERE, "Could not create logs.yml", e);
+                plugin.getLogger().severe("Could not create logs.yml: " + e);
             }
         }
 
@@ -58,7 +58,7 @@ public class LogManager {
             }
         }
 
-        plugin.getLogger().info("Loaded " + logCache.size() + " log entries");
+        plugin.getLogger().fine("Loaded " + logCache.size() + " log entries");
     }
 
     public void logJail(String playerName, String executor, String jailName, long time, String reason) {
@@ -141,7 +141,7 @@ public class LogManager {
         try {
             logs.save(logsFile);
         } catch (IOException e) {
-            plugin.getLogger().log(Level.SEVERE, "Could not save logs.yml", e);
+            plugin.getLogger().severe( "Could not save logs.yml: " + e);
         }
     }
 

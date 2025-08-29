@@ -47,7 +47,7 @@ public class PlaceholderManager {
                 plugin.getLogger().warning("Can't register PlaceholderAPI extensions!");
             }
         } catch (Exception e) {
-            plugin.getLogger().log(Level.SEVERE, "Error on PlaceholderAPI initialization:", e);
+            plugin.getLogger().severe( "Error on PlaceholderAPI initialization: " + e);
         }
     }
 
@@ -61,7 +61,7 @@ public class PlaceholderManager {
             registerHook(new StatisticsHook(plugin));
         }
 
-        plugin.getLogger().info("Registered defaults placeholders: " + hooks.size());
+        plugin.getLogger().fine("Registered defaults placeholders: " + hooks.size());
     }
 
     public boolean registerHook(PlaceholderHook hook) {
@@ -78,7 +78,7 @@ public class PlaceholderManager {
         hooks.put(hook.getHookPrefix().toLowerCase(), hook);
         expansion.registerHook(hook.getHookPrefix(), hook);
 
-        plugin.getLogger().info("Placeholder registered: " + hook.getHookPrefix() + " (" + hook.getDescription() + ")");
+        plugin.getLogger().fine("Placeholder registered: " + hook.getHookPrefix() + " (" + hook.getDescription() + ")");
         return true;
     }
 
@@ -90,7 +90,7 @@ public class PlaceholderManager {
         PlaceholderHook hook = hooks.remove(prefix.toLowerCase());
         if (hook != null) {
             expansion.unregisterHook(prefix);
-            plugin.getLogger().info("Placeholder deleted: " + prefix);
+            plugin.getLogger().fine("Placeholder deleted: " + prefix);
             return true;
         }
 
@@ -114,7 +114,7 @@ public class PlaceholderManager {
         initializePlaceholderAPI();
         registerDefaultHooks();
 
-        plugin.getLogger().info("Placeholder system reloaded!");
+        plugin.getLogger().fine("Placeholder system reloaded!");
     }
 
     public void shutdown() {

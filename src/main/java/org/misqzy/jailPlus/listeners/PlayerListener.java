@@ -16,6 +16,9 @@ import org.misqzy.jailPlus.managers.JailManager;
 import org.misqzy.jailPlus.managers.LocalizationManager;
 import org.misqzy.jailPlus.utils.TimeUtils;
 
+import java.util.List;
+import java.util.Set;
+
 public class PlayerListener implements Listener {
 
     private final JailManager jailManager;
@@ -102,9 +105,11 @@ public class PlayerListener implements Listener {
         String command = event.getMessage().toLowerCase();
         String[] parts = command.split(" ");
         String commandName = parts[0].substring(1);
+        List<String> unblockedCommands = configManager.getUnblockedCommands();
+        unblockedCommands.add("jail");
 
         // Check unblocked commands
-        for (String allowed : configManager.getUnblockedCommands()) {
+        for (String allowed : unblockedCommands) {
             if (commandName.equals(allowed) || commandName.startsWith(allowed + ":")) {
                 return; // Allow this command
             }
