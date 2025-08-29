@@ -1,16 +1,17 @@
 name: JailPlus
-version: '0.0.1-SNAPSHOT'
+version: '${version}'
 main: org.misqzy.jailPlus.JailPlus
 api-version: '1.21'
 author: MISQZY
+description: Jail plugin with PlaceholderAPI support and advanced features
 
 depend: []
 softdepend: [Vault, PlaceholderAPI]
 
 commands:
   jail:
-    description: Jail plauer
-    usage: /<command> <player> [time] [reason] | /<command> list | /<command> info <player>
+    description: Jail player command
+    usage: /<command> <player> [jail] [time] [reason] | /<command> list | /<command> info [player]
     permission: jailplus.jail
     aliases: [j]
 
@@ -34,6 +35,9 @@ permissions:
       jailplus.unjail: true
       jailplus.admin.*: true
       jailplus.reload: true
+      jailplus.bypass: true
+      jailplus.notify: true
+      jailplus.placeholders: true
     default: op
 
   jailplus.jail:
@@ -43,6 +47,7 @@ permissions:
   jailplus.jail.*:
     description: Access to all jail commands
     children:
+      jailplus.jail: true
       jailplus.jail.player: true
       jailplus.jail.list: true
       jailplus.jail.info.*: true
@@ -88,11 +93,14 @@ permissions:
     description: Access to all admin functions
     children:
       jailplus.admin: true
-      jailplus.admin.time: true
       jailplus.admin.create: true
       jailplus.admin.delete: true
       jailplus.admin.info: true
       jailplus.admin.list: true
+      jailplus.admin.time: true
+      jailplus.admin.logs: true
+      jailplus.admin.stats: true
+      jailplus.admin.notify: true
     default: op
 
   jailplus.admin.create:
@@ -115,11 +123,26 @@ permissions:
     description: Access to manage prisoner time command
     default: op
 
+  jailplus.admin.logs:
+    description: Access to view logs
+    default: op
+
+  jailplus.admin.stats:
+    description: Access to view statistics
+    default: op
+
+  jailplus.admin.notify:
+    description: Receive admin notifications about jails
+    default: op
+
   jailplus.bypass:
-    description: Jail bypass
+    description: Bypass all jail restrictions
     default: false
 
   jailplus.reload:
     description: Reload plugin
     default: op
 
+  jailplus.placeholders:
+    description: Access to view placeholder information
+    default: true

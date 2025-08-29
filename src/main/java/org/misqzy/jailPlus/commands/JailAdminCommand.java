@@ -13,6 +13,7 @@ import org.misqzy.jailPlus.data.PlayerJailData;
 import org.misqzy.jailPlus.managers.ConfigManager;
 import org.misqzy.jailPlus.managers.JailManager;
 import org.misqzy.jailPlus.managers.LocalizationManager;
+import org.misqzy.jailPlus.managers.LogManager;
 import org.misqzy.jailPlus.utils.TimeUtils;
 
 import java.util.ArrayList;
@@ -23,16 +24,18 @@ public class JailAdminCommand implements CommandExecutor, TabCompleter {
 
     private final JailPlus plugin;
     private final JailManager jailManager;
+    private final ConfigManager configManager;
     private final LocalizationManager localizationManager;
 
     public JailAdminCommand(JailPlus plugin, JailManager jailManager, ConfigManager configManager, LocalizationManager localizationManager) {
         this.plugin = plugin;
         this.jailManager = jailManager;
+        this.configManager = configManager;
         this.localizationManager = localizationManager;
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, @NotNull Command command,@NotNull String label, String[] args) {
+    public boolean onCommand(CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (!sender.hasPermission("jailplus.admin")) {
             localizationManager.sendMessage(sender, "no-permission");
             return true;
@@ -71,6 +74,18 @@ public class JailAdminCommand implements CommandExecutor, TabCompleter {
                 handleReload(sender);
                 break;
 
+            case "logs":
+                handleLogs(sender, args);
+                break;
+
+            case "stats":
+                handleStats(sender, args);
+                break;
+
+            case "placeholders":
+                handlePlaceholders(sender);
+                break;
+
             case "help":
                 showHelp(sender);
                 break;
@@ -91,7 +106,7 @@ public class JailAdminCommand implements CommandExecutor, TabCompleter {
         }
 
         if (!sender.hasPermission("jailplus.admin.create")) {
-            localizationManager.sendMessage( sender, "no-permission");
+            localizationManager.sendMessage(sender, "no-permission");
             return;
         }
 
@@ -115,13 +130,12 @@ public class JailAdminCommand implements CommandExecutor, TabCompleter {
         }
     }
 
-
     private void handleDeleteJail(CommandSender sender, String[] args) {
-        if ((sender instanceof Player player) &&
-                (!sender.hasPermission("jailplus.admin.delete"))) {
+        if ((sender instanceof Player player) && (!sender.hasPermission("jailplus.admin.delete"))) {
             localizationManager.sendMessage(player, "no-permission");
             return;
         }
+
         if (args.length < 2) {
             localizationManager.sendMessage(sender, "admin.delete-usage");
             return;
@@ -136,15 +150,14 @@ public class JailAdminCommand implements CommandExecutor, TabCompleter {
 
         boolean success = jailManager.deleteJail(jailName);
         if (success) {
-            localizationManager.sendMessage( sender, "admin.jail-deleted", jailName);
+            localizationManager.sendMessage(sender, "admin.jail-deleted", jailName);
         } else {
-            localizationManager.sendMessage( sender, "admin.jail-delete-failed", jailName);
+            localizationManager.sendMessage(sender, "admin.jail-delete-failed", jailName);
         }
     }
 
     private void handleListJails(CommandSender sender) {
-        if ((sender instanceof Player player)
-                && (!sender.hasPermission("jailplus.admin.list"))) {
+        if ((sender instanceof Player player) && (!sender.hasPermission("jailplus.admin.list"))) {
             localizationManager.sendMessage(player, "no-permission");
             return;
         }
@@ -157,7 +170,6 @@ public class JailAdminCommand implements CommandExecutor, TabCompleter {
         localizationManager.sendMessage(sender, "admin.jails-header");
 
         for (JailData jail : jailManager.getAllJails()) {
-
             long prisonersCount = jailManager.getAllJailedPlayers().stream()
                     .filter(data -> data.getJailName().equals(jail.getName()))
                     .count();
@@ -173,15 +185,14 @@ public class JailAdminCommand implements CommandExecutor, TabCompleter {
         }
     }
 
-
     private void handleJailInfo(CommandSender sender, String[] args) {
-        if ((sender instanceof Player player)
-                && (!sender.hasPermission("jailplus.admin.info"))) {
+        if ((sender instanceof Player player) && (!sender.hasPermission("jailplus.admin.info"))) {
             localizationManager.sendMessage(player, "no-permission");
             return;
         }
+
         if (args.length < 2) {
-            localizationManager.sendMessage( sender, "admin.info-usage");
+            localizationManager.sendMessage(sender, "admin.info-usage");
             return;
         }
 
@@ -207,16 +218,14 @@ public class JailAdminCommand implements CommandExecutor, TabCompleter {
         );
     }
 
-
     private void handleTimeCommand(CommandSender sender, String[] args) {
-        if ((sender instanceof Player player)
-                && (!sender.hasPermission("jailplus.admin.time"))) {
+        if ((sender instanceof Player player) && (!sender.hasPermission("jailplus.admin.time"))) {
             localizationManager.sendMessage(player, "no-permission");
             return;
         }
 
         if (args.length < 4) {
-            localizationManager.sendMessage( sender, "jail.time-usage");
+            localizationManager.sendMessage(sender, "jail.time-usage");
             return;
         }
 
@@ -239,11 +248,17 @@ public class JailAdminCommand implements CommandExecutor, TabCompleter {
         try {
             long time = TimeUtils.parseTime(timeString);
 
+            String executorName = sender instanceof Player ? sender.getName() : "Console";
+
             switch (action) {
                 case "add":
                     jailData.addTime(time);
                     localizationManager.sendMessage(sender, "jail.time-added",
                             target.getName(), TimeUtils.formatTime(time));
+
+                    if (plugin.getLogManager() != null) {
+                        plugin.getLogManager().logTimeChange(target.getName(), executorName, "ADD", time);
+                    }
                     break;
 
                 case "remove":
@@ -251,12 +266,20 @@ public class JailAdminCommand implements CommandExecutor, TabCompleter {
                     jailData.subtractTime(time);
                     localizationManager.sendMessage(sender, "jail.time-removed",
                             target.getName(), TimeUtils.formatTime(time));
+
+                    if (plugin.getLogManager() != null) {
+                        plugin.getLogManager().logTimeChange(target.getName(), executorName, "SUBTRACT", time);
+                    }
                     break;
 
                 case "set":
                     jailData.setTime(time);
                     localizationManager.sendMessage(sender, "jail.time-set",
                             target.getName(), TimeUtils.formatTime(time));
+
+                    if (plugin.getLogManager() != null) {
+                        plugin.getLogManager().logTimeChange(target.getName(), executorName, "SET", time);
+                    }
                     break;
 
                 default:
@@ -271,10 +294,8 @@ public class JailAdminCommand implements CommandExecutor, TabCompleter {
         }
     }
 
-
     private void handleReload(CommandSender sender) {
-        if ((sender instanceof Player player)
-                && (!sender.hasPermission("jailplus.reload"))) {
+        if ((sender instanceof Player player) && (!sender.hasPermission("jailplus.reload"))) {
             localizationManager.sendMessage(player, "no-permission");
             return;
         }
@@ -292,6 +313,104 @@ public class JailAdminCommand implements CommandExecutor, TabCompleter {
         }
     }
 
+    private void handleLogs(CommandSender sender, String[] args) {
+        if ((sender instanceof Player player) && (!sender.hasPermission("jailplus.admin.logs"))) {
+            localizationManager.sendMessage(player, "no-permission");
+            return;
+        }
+
+        LogManager logManager = plugin.getLogManager();
+        if (logManager == null) {
+            localizationManager.sendMessage(sender, "admin.logs-disabled");
+            return;
+        }
+
+        List<LogManager.LogEntry> logs;
+
+        if (args.length > 1) {
+            String filter = args[1].toLowerCase();
+            switch (filter) {
+                case "jail":
+                    logs = logManager.getLogsByAction("JAIL");
+                    break;
+                case "unjail":
+                    logs = logManager.getLogsByAction("UNJAIL");
+                    break;
+                default:
+                    logs = logManager.getLogsForPlayer(args[1]);
+                    break;
+            }
+        } else {
+            logs = logManager.getLogs();
+        }
+
+        if (logs.isEmpty()) {
+            localizationManager.sendMessage(sender, "admin.no-logs");
+            return;
+        }
+
+        localizationManager.sendMessage(sender, "admin.logs-header");
+
+        // Show last 10 entries
+        int start = Math.max(0, logs.size() - 10);
+        for (int i = start; i < logs.size(); i++) {
+            LogManager.LogEntry entry = logs.get(i);
+            sender.sendMessage("§7[" + entry.getTimestamp() + "] §e" + entry.getAction() +
+                    " §f" + entry.getPlayer() + " §7by §f" + entry.getExecutor() +
+                    " §7- §f" + entry.getDetails());
+        }
+    }
+
+    private void handleStats(CommandSender sender, String[] args) {
+        if ((sender instanceof Player player) && (!sender.hasPermission("jailplus.admin.stats"))) {
+            localizationManager.sendMessage(player, "no-permission");
+            return;
+        }
+
+        if (plugin.getStatisticsManager() == null) {
+            localizationManager.sendMessage(sender, "admin.stats-disabled");
+            return;
+        }
+
+        localizationManager.sendMessage(sender, "admin.stats-header");
+        localizationManager.sendMessage(sender, "admin.stats-general",
+                jailManager.getAllJails().size(),
+                jailManager.getAllJailedPlayers().size()
+        );
+
+        if (args.length > 1) {
+            Player target = Bukkit.getPlayer(args[1]);
+            if (target != null) {
+                var statsManager = plugin.getStatisticsManager();
+                sender.sendMessage("§eStats for " + target.getName() + ":");
+                sender.sendMessage("§7Times jailed: §f" + statsManager.getTimesJailed(target.getUniqueId()));
+                sender.sendMessage("§7Total jail time: §f" + TimeUtils.formatTime(statsManager.getTotalJailTime(target.getUniqueId())));
+                sender.sendMessage("§7Longest jail: §f" + TimeUtils.formatTime(statsManager.getLongestJailTime(target.getUniqueId())));
+                sender.sendMessage("§7Frequent offender: §f" + (statsManager.isFrequentOffender(target.getUniqueId()) ? "Yes" : "No"));
+            }
+        }
+    }
+
+    private void handlePlaceholders(CommandSender sender) {
+        if ((sender instanceof Player player) && (!sender.hasPermission("jailplus.placeholders"))) {
+            localizationManager.sendMessage(player, "no-permission");
+            return;
+        }
+
+        if (plugin.getPlaceholderManager() == null || !plugin.getPlaceholderManager().isPlaceholderAPIEnabled()) {
+            localizationManager.sendMessage(sender, "admin.placeholders-disabled");
+            return;
+        }
+
+        localizationManager.sendMessage(sender, "admin.placeholders-header");
+
+        String[] placeholders = plugin.getPlaceholderManager().getAvailablePlaceholders();
+        for (String placeholder : placeholders) {
+            sender.sendMessage("§7- §e" + placeholder);
+        }
+
+        sender.sendMessage("§aTotal: " + placeholders.length + " placeholders available");
+    }
 
     private void showHelp(CommandSender sender) {
         localizationManager.sendMessage(sender, "admin.help-header");
@@ -301,28 +420,30 @@ public class JailAdminCommand implements CommandExecutor, TabCompleter {
         localizationManager.sendMessage(sender, "admin.help-info");
         localizationManager.sendMessage(sender, "admin.help-reload");
         localizationManager.sendMessage(sender, "admin.help-time");
+        localizationManager.sendMessage(sender, "admin.help-logs");
+        localizationManager.sendMessage(sender, "admin.help-stats");
+        localizationManager.sendMessage(sender, "admin.help-placeholders");
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender,@NotNull Command command,@NotNull String alias, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {
-            completions.addAll(Arrays.asList("create", "delete", "list", "info", "reload", "help", "time"));
+            completions.addAll(Arrays.asList("create", "delete", "list", "info", "reload",
+                    "help", "time", "logs", "stats", "placeholders"));
         } else if (args.length == 2) {
-            if (args[0].equalsIgnoreCase("delete")
-                    || args[0].equalsIgnoreCase("info")
-                    ) {
+            if (args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("info")) {
                 jailManager.getAllJails().forEach(jail -> completions.add(jail.getName()));
-            }
-            else if (args[0].equalsIgnoreCase("time")) {
+            } else if (args[0].equalsIgnoreCase("time") || args[0].equalsIgnoreCase("stats")) {
                 Bukkit.getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+            } else if (args[0].equalsIgnoreCase("logs")) {
+                completions.addAll(Arrays.asList("jail", "unjail"));
+                jailManager.getAllJailedPlayers().forEach(data -> completions.add(data.getPlayerName()));
             }
-        }
-        else if (args.length == 3 && args[0].equalsIgnoreCase("time")) {
+        } else if (args.length == 3 && args[0].equalsIgnoreCase("time")) {
             completions.addAll(Arrays.asList("add", "remove", "set"));
-        }
-        else if (args.length == 4 && args[0].equalsIgnoreCase("time")) {
+        } else if (args.length == 4 && args[0].equalsIgnoreCase("time")) {
             completions.addAll(Arrays.asList("30m", "1h", "2h", "1d", "permanent"));
         }
 

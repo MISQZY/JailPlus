@@ -27,10 +27,9 @@ public class UnjailCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, @NotNull Command command,@NotNull String label, String[] args) {
-        if (!sender.hasPermission("jailplus.unjail")
-                && (sender instanceof Player)) {
-                localizationManager.sendMessage(sender, "no-permission");
+    public boolean onCommand(CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        if (!sender.hasPermission("jailplus.unjail") && (sender instanceof Player)) {
+            localizationManager.sendMessage(sender, "no-permission");
             return true;
         }
 
@@ -42,6 +41,8 @@ public class UnjailCommand implements CommandExecutor, TabCompleter {
         String targetName = args[0];
         Player target = Bukkit.getPlayer(targetName);
 
+        String executorName = sender instanceof Player ? sender.getName() : "Console";
+
         if (target != null) {
             if (!jailManager.isPlayerJailed(target)) {
                 localizationManager.sendMessage(sender, "jail.not-jailed", target.getName());
@@ -51,6 +52,11 @@ public class UnjailCommand implements CommandExecutor, TabCompleter {
             boolean success = jailManager.unjailPlayer(target.getUniqueId());
             if (success) {
                 localizationManager.sendMessage(sender, "unjail.success", target.getName());
+
+                // Log the unjail action
+                if (plugin.getLogManager() != null) {
+                    plugin.getLogManager().logUnjail(target.getName(), executorName, "Manual unjail");
+                }
             } else {
                 localizationManager.sendMessage(sender, "unjail.failed", target.getName());
             }
@@ -58,6 +64,11 @@ public class UnjailCommand implements CommandExecutor, TabCompleter {
             boolean success = jailManager.unjailPlayer(targetName);
             if (success) {
                 localizationManager.sendMessage(sender, "unjail.success", targetName);
+
+                // Log the unjail action
+                if (plugin.getLogManager() != null) {
+                    plugin.getLogManager().logUnjail(targetName, executorName, "Manual unjail (offline)");
+                }
             } else {
                 localizationManager.sendMessage(sender, "unjail.not-found", targetName);
             }
@@ -67,7 +78,7 @@ public class UnjailCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender,@NotNull Command command,@NotNull String alias, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {

@@ -1,127 +1,143 @@
-# ======================================
-#    English localization JailPlus (MiniMessage)
-# ======================================
+# ===================================
+# English localization JailPlus
+# ===================================
 
 # Common messages
-prefix: "<gray>[<gold>JailPlus<gray>]</gray>"
-no-permission: "{prefix}<red>You don't have permission to execute this command!</red>"
-command-not-found: "{prefix}<red>Command not found!</red>"
-player-not-found: "{prefix}<red>Player <yellow>{0}</yellow> not found!</red>"
-reload-success: "{prefix}<green>Configuration successfully reloaded!</green>"
+prefix: "[JailPlus]"
+no-permission: "{prefix}&cYou don't have permission to execute this command!"
+command-not-found: "{prefix}&cCommand not found!"
+player-not-found: "{prefix}&cPlayer {0} not found!"
+reload-success: "{prefix}&aConfiguration successfully reloaded!"
 
 # Jail commands
 jail:
-  usage: "{prefix}<red>Usage: <yellow>/jail player <player> [time] [reason]</yellow></red>"
-  already-jailed: "{prefix}<red>Player <yellow>{0}</yellow> is already jailed!</red>"
-  invalid-time: "{prefix}<red>Invalid jail time!</red>"
-  invalid-time-format: "{prefix}<red>Invalid time format! Use: 30s, 5m, 2h, 1d</red>"
-  time-too-long: "{prefix}<red>Maximum jail time: <yellow>{0}</yellow></red>"
-  no-available-jails: "{prefix}<red>No available jails!</red>"
-  success: "{prefix}<green>Player <yellow>{0}</yellow> jailed for <yellow>{1}</yellow> reason: <yellow>{2}</yellow></green>"
-  failed: "{prefix}<red>Failed to jail player <yellow>{0}</yellow></red>"
+  usage: "{prefix}&cUsage: /jail player <player> [jail] [time] [reason]"
+  already-jailed: "{prefix}&cPlayer {0} is already jailed!"
+  invalid-time: "{prefix}&cInvalid jail time!"
+  invalid-time-format: "{prefix}&cInvalid time format! Use: 30s, 5m, 2h, 1d"
+  time-too-long: "{prefix}&cMaximum jail time: {0}"
+  no-available-jails: "{prefix}&cNo available jails!"
+  success: "{prefix}&aPlayer {0} jailed for {1}. Reason: {2}"
+  failed: "{prefix}&cFailed to jail player {0}"
 
   # Messages for prisoner
-  jailed: "{prefix}<red>You have been jailed in <yellow>{0}</yellow> for <yellow>{1}</yellow> reason: <yellow>{2}</yellow></red>"
-  unjailed: "{prefix}<green>You have been released from jail!</green>"
-  login-message: "{prefix}<red>You are in jail <yellow>{0}</yellow><red>. Time remaining: <yellow>{1}</yellow><red>. Reason: <yellow>{2}</yellow></red>"
+  jailed: "{prefix}&cYou have been jailed in {0} for {1}. Reason: {2}"
+  unjailed: "{prefix}&aYou have been released from jail!"
+  login-message: "{prefix}&eYou are in jail {0}. Time remaining: {1}. Reason: {2}"
 
   # Broadcast messages
-  broadcast: "{prefix}<yellow>{0}</yellow> <red>has been jailed for <yellow>{2}</yellow> reason: <yellow>{1}</yellow></red>"
-  unjail-broadcast: "{prefix}<yellow>{0}</yellow> <green>has been released from jail!</green>"
+  broadcast: "{prefix}&e{0} has been jailed for {1}. Reason: {2}"
+  unjail-broadcast: "{prefix}&a{0} has been released from jail!"
 
   # Restrictions
-  command-blocked: "{prefix}<red>You cannot use commands in jail!</red>"
-  teleport-blocked: "{prefix}<red>You cannot teleport in jail!</red>"
-  action-blocked: "{prefix}<red>You cannot perform this action in jail!</red>"
-  pvp-blocked: "{prefix}<red>You cannot fight in jail!</red>"
-  inventory-blocked: "{prefix}<red>You cannot open inventories in jail!</red>"
-  cannot-attack-prisoner: "{prefix}<red>You cannot attack a prisoner!</red>"
+  command-blocked: "{prefix}&cYou cannot use commands in jail!"
+  teleport-blocked: "{prefix}&cYou cannot teleport in jail!"
+  action-blocked: "{prefix}&cYou cannot perform this action in jail!"
+  pvp-blocked: "{prefix}&cYou cannot fight in jail!"
+  inventory-blocked: "{prefix}&cYou cannot open inventories in jail!"
+  cannot-attack-prisoner: "{prefix}&cYou cannot attack a prisoner!"
 
   # Chat prefix
-  chat-prefix: "<gray>[<red>PRISONER</red>]</gray>"
+  chat-prefix: "&c[PRISONER]"
 
   # Lists and info
-  list-empty: "{prefix}<yellow>No one is currently jailed.</yellow>"
-  list-header: "{prefix}<gold>=== Jailed Players List ===</gold>"
-  list-entry: "{prefix}<yellow>{0} <gray>- Jail: <white>{1} <gray>- Time: <white>{2} <gray>- Reason: <white>{3}</white></gray></yellow>"
+  list-empty: "{prefix}&7No one is currently jailed."
+  list-header: "{prefix}&e=== Jailed Players List ==="
+  list-entry: "{prefix}&f{0} &7- Jail: &e{1} &7- Time: &a{2} &7- Reason: &f{3}"
 
-  not-jailed: "{prefix}<red>Player <yellow>{0}</yellow> is not jailed!</red>"
-  you-not-jailed: "{prefix}<red>You not jailed!</red>"
-  info-usage: "{prefix}<red>Usage: <yellow>/jail info <player></yellow></red>"
+  not-jailed: "{prefix}&7Player {0} is not jailed!"
+  you-not-jailed: "{prefix}&7You are not jailed!"
+  info-usage: "{prefix}&cUsage: /jail info <player>"
   info: |
-    <gold>=== Prisoner Information ===</gold>
-    <yellow>Player: <white>{0}</white></yellow>
-    <yellow>Jail: <white>{1}</white></yellow>
-    <yellow>Time remaining: <white>{2}</white></yellow>
-    <yellow>Reason: <white>{3}</white></yellow>
-    <yellow>Jailed by: <white>{4}</white></yellow>
+    &e=== Prisoner Information ===
+    &fPlayer: &a{0}
+    &fJail: &e{1}
+    &fTime remaining: &a{2}
+    &fReason: &f{3}
+    &fJailed by: &e{4}
   your-info: |
-    <red>=== Your Jail Information ===</red>
-    <yellow>Jail: <white>{0}</white></yellow>
-    <yellow>Time remaining: <white>{1}</white></yellow>
-    <yellow>Reason: <white>{2}</white></yellow>
-    <yellow>Jailed by: <white>{3}</white></yellow>
-    <gray>Use <yellow>/jail info</yellow> <gray>to check your jail status</gray>
+    &e=== Your Jail Information ===
+    &fJail: &e{0}
+    &fTime remaining: &a{1}
+    &fReason: &f{2}
+    &fJailed by: &e{3}
 
   # Time management
-  time-usage: "{prefix}<red>Usage: <yellow>/jail time <player> <add/remove/set> <time></yellow></red>"
-  time-added: "{prefix}<green>Added <yellow>{1}</yellow> jail time for player <yellow>{0}</yellow></green>"
-  time-removed: "{prefix}<green>Removed <yellow>{1}</yellow> jail time for player <yellow>{0}</yellow></green>"
-  time-set: "{prefix}<green>Jail time for player <yellow>{0}</yellow> set to <yellow>{1}</yellow></green>"
+  time-usage: "{prefix}&cUsage: /jailadmin time <player> <action> <time>"
+  time-added: "{prefix}&aAdded {1} jail time for player {0}"
+  time-removed: "{prefix}&aRemoved {1} jail time for player {0}"
+  time-set: "{prefix}&aJail time for player {0} set to {1}"
 
   # Help
-  help-header: "<gold>=== JailPlus Commands Help ===</gold>"
-  help-jail: "<yellow>/jail player <player> [time] [reason] <gray>- Jail a player</gray>"
-  help-list: "<yellow>/jail list <gray>- List jailed players</gray>"
-  help-info: "<yellow>/jail info <player> <gray>- Prisoner information</gray>"
+  help-header: "&e=== JailPlus Commands Help ==="
+  help-jail: "&f/jail player <player> [jail] [time] [reason] &7- Jail a player"
+  help-list: "&f/jail list &7- List jailed players"
+  help-info: "&f/jail info [player] &7- Prisoner information"
 
 # Unjail commands
 unjail:
-  usage: "{prefix}<red>Usage: <yellow>/unjail <player></yellow></red>"
-  success: "{prefix}<green>Player <yellow>{0}</yellow> successfully released!</green>"
-  failed: "{prefix}<red>Failed to release player <yellow>{0}</yellow></red>"
-  not-found: "{prefix}<red>Prisoner named <yellow>{0}</yellow> not found!</red>"
+  usage: "{prefix}&cUsage: /unjail <player>"
+  success: "{prefix}&aPlayer {0} successfully released!"
+  failed: "{prefix}&cFailed to release player {0}"
+  not-found: "{prefix}&cPrisoner named {0} not found!"
 
 # Admin commands
 admin:
-  player-only: "{prefix}<red>This command is only available to players!</red>"
-  unknown-command: "{prefix}<red>Unknown command: <yellow>{0}</yellow></red>"
+  player-only: "{prefix}&cThis command is only available to players!"
+  unknown-command: "{prefix}&cUnknown command: {0}"
 
   # Jail creation
-  create-usage: "{prefix}<red>Usage: <yellow>/jailadmin create <name></yellow></red>"
-  jail-exists: "{prefix}<red>Jail named <yellow>{0}</yellow> already exists!</red>"
-  jail-created: "{prefix}<green>Jail <yellow>{0}</yellow> successfully created!</green>"
-  jail-create-failed: "{prefix}<red>Failed to create jail <yellow>{0}</yellow></red>"
+  create-usage: "{prefix}&cUsage: /jailadmin create <name>"
+  jail-exists: "{prefix}&cJail named {0} already exists!"
+  jail-created: "{prefix}&aJail {0} successfully created!"
+  jail-create-failed: "{prefix}&cFailed to create jail {0}"
 
   # Jail deletion
-  delete-usage: "{prefix}<red>Usage: <yellow>/jailadmin delete <name></yellow></red>"
-  jail-not-exists: "{prefix}<red>Jail named <yellow>{0}</yellow> does not exist!</red>"
-  jail-deleted: "{prefix}<green>Jail <yellow>{0}</yellow> successfully deleted!</green>"
-  jail-delete-failed: "{prefix}<red>Failed to delete jail <yellow>{0}</yellow></red>"
+  delete-usage: "{prefix}&cUsage: /jailadmin delete <name>"
+  jail-not-exists: "{prefix}&cJail named {0} does not exist!"
+  jail-deleted: "{prefix}&aJail {0} successfully deleted!"
+  jail-delete-failed: "{prefix}&cFailed to delete jail {0}"
 
   # Jail list
-  no-jails: "{prefix}<yellow>No jails created.</yellow>"
-  jails-header: "<gold>=== Jails List ===</gold>"
-  jail-entry: "<yellow>{0}</yellow> <gray>-</gray> World: <white>{1} <gray>-</gray> Cords: <white>{2}, {3}, {4} Prisoners: <white>{5}</white>"
+  no-jails: "{prefix}&7No jails created."
+  jails-header: "&e=== Jails List ==="
+  jail-entry: "&e{0} &7- World: &f{1} &7- Coords: &f{2}, {3}, {4} &7- Prisoners: &a{5}"
 
   # Jail info
-  info-usage: "{prefix}<red>Usage: <yellow>/jailadmin info <name></yellow></red>"
+  info-usage: "{prefix}&cUsage: /jailadmin info <name>"
   jail-info: |
-    <gold>=== Jail Information ===</gold>
-    <yellow>Name: <white>{0}</white></yellow>
-    <yellow>World: <white>{1}</white></yellow>
-    <yellow>Coordinates: <white>{2}, {3}, {4}</white></yellow>
-    <yellow>Prisoners: <white>{5}</white></yellow>
+    &e=== Jail Information ===
+    &fName: &e{0}
+    &fWorld: &f{1}
+    &fCoordinates: &f{2}, {3}, {4}
+    &fPrisoners: &a{5}
 
   # Reload
-  reload-success: "{prefix}<green>Plugin successfully reloaded in <yellow>{0}ms</yellow>!</green>"
-  reload-failed: "{prefix}<red>Error during reload: <yellow>{0}</yellow></red>"
+  reload-success: "{prefix}&aPlugin successfully reloaded in {0}ms!"
+  reload-failed: "{prefix}&cError during reload: {0}"
+
+  # Logs
+  logs-disabled: "{prefix}&cLogging is disabled in configuration!"
+  no-logs: "{prefix}&7No logs found."
+  logs-header: "&e=== Recent Logs ==="
+
+  # Statistics
+  stats-disabled: "{prefix}&cStatistics are disabled in configuration!"
+  stats-header: "&e=== JailPlus Statistics ==="
+  stats-general: "&fTotal jails: &e{0} &7| &fActive prisoners: &a{1}"
+
+  # PlaceholderAPI
+  placeholders-disabled: "{prefix}&cPlaceholderAPI integration is disabled!"
+  placeholders-header: "&e=== Available Placeholders ==="
 
   # Help
-  help-header: "<gold>=== Admin Commands Help ===</gold>"
-  help-create: "<yellow>/jailadmin create <name> <gray>- Create jail</gray>"
-  help-delete: "<yellow>/jailadmin delete <name> <gray>- Delete jail</gray>"
-  help-list: "<yellow>/jailadmin list <gray>- List jails</gray>"
-  help-info: "<yellow>/jailadmin info <name> <gray>- Jail information</gray>"
-  help-reload: "<yellow>/jailadmin reload <gray>- Reload plugin</gray>"
-  help-time: "<yellow>/jailadmin time <player> <add/remove/set> <time> <gray>- Manage jail time</gray>"
+  help-header: "&e=== Admin Commands Help ==="
+  help-create: "&f/jailadmin create <name> &7- Create jail"
+  help-delete: "&f/jailadmin delete <name> &7- Delete jail"
+  help-list: "&f/jailadmin list &7- List jails"
+  help-info: "&f/jailadmin info <name> &7- Jail information"
+  help-reload: "&f/jailadmin reload &7- Reload plugin"
+  help-time: "&f/jailadmin time <player> <action> <time> &7- Manage jail time"
+  help-logs: "&f/jailadmin logs [filter] &7- View action logs"
+  help-stats: "&f/jailadmin stats [player] &7- View statistics"
+  help-placeholders: "&f/jailadmin placeholders &7- List available placeholders"

@@ -31,7 +31,6 @@ public class JailData {
         this.pitch = location.getPitch();
     }
 
-
     public Location getLocation() {
         World world = Bukkit.getWorld(worldName);
         if (world == null) {
@@ -40,63 +39,21 @@ public class JailData {
         return new Location(world, x, y, z, yaw, pitch);
     }
 
-
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getWorldName() {
-        return worldName;
-    }
-
-    public void setWorldName(String worldName) {
-        this.worldName = worldName;
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public void setY(double y) {
-        this.y = y;
-    }
-
-    public double getZ() {
-        return z;
-    }
-
-    public void setZ(double z) {
-        this.z = z;
-    }
-
-    public float getYaw() {
-        return yaw;
-    }
-
-    public void setYaw(float yaw) {
-        this.yaw = yaw;
-    }
-
-    public float getPitch() {
-        return pitch;
-    }
-
-    public void setPitch(float pitch) {
-        this.pitch = pitch;
-    }
+    // Getters and setters
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getWorldName() { return worldName; }
+    public void setWorldName(String worldName) { this.worldName = worldName; }
+    public double getX() { return x; }
+    public void setX(double x) { this.x = x; }
+    public double getY() { return y; }
+    public void setY(double y) { this.y = y; }
+    public double getZ() { return z; }
+    public void setZ(double z) { this.z = z; }
+    public float getYaw() { return yaw; }
+    public void setYaw(float yaw) { this.yaw = yaw; }
+    public float getPitch() { return pitch; }
+    public void setPitch(float pitch) { this.pitch = pitch; }
 
     @Override
     public String toString() {

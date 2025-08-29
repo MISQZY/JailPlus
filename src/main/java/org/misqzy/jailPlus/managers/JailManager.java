@@ -1,8 +1,7 @@
 package org.misqzy.jailPlus.managers;
 
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -10,6 +9,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.misqzy.jailPlus.JailPlus;
 import org.misqzy.jailPlus.data.JailData;
 import org.misqzy.jailPlus.data.PlayerJailData;
+import org.misqzy.jailPlus.utils.TimeUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,18 +23,18 @@ public class JailManager {
     private final ConfigManager configManager;
     private final LocalizationManager localizationManager;
 
-
     private final Map<String, JailData> jails;
     private final Map<UUID, PlayerJailData> jailedPlayers;
 
+    private final Set<UUID> jailedPlayerUUIDs;
 
     private File jailsFile;
     private File playersFile;
     private FileConfiguration jailsConfig;
     private FileConfiguration playersConfig;
 
-
     private BukkitRunnable jailTimer;
+    private volatile boolean timerRunning = false;
 
     public JailManager(JailPlus plugin, ConfigManager configManager, LocalizationManager localizationManager) {
         this.plugin = plugin;
@@ -42,12 +42,12 @@ public class JailManager {
         this.localizationManager = localizationManager;
         this.jails = new ConcurrentHashMap<>();
         this.jailedPlayers = new ConcurrentHashMap<>();
+        this.jailedPlayerUUIDs = ConcurrentHashMap.newKeySet();
 
         setupDataFiles();
         loadData();
         startJailTimer();
     }
-
 
     private void setupDataFiles() {
         File dataFolder = plugin.getDataFolder();
@@ -62,7 +62,7 @@ public class JailManager {
             try {
                 jailsFile.createNewFile();
             } catch (IOException e) {
-                plugin.getLogger().log(Level.SEVERE, "Error when try to create jails.yml", e);
+                plugin.getLogger().log(Level.SEVERE, "Error creating jails.yml", e);
             }
         }
 
@@ -70,7 +70,7 @@ public class JailManager {
             try {
                 playersFile.createNewFile();
             } catch (IOException e) {
-                plugin.getLogger().log(Level.SEVERE, "Error when try to create players.yml", e);
+                plugin.getLogger().log(Level.SEVERE, "Error creating players.yml", e);
             }
         }
 
@@ -78,12 +78,10 @@ public class JailManager {
         playersConfig = YamlConfiguration.loadConfiguration(playersFile);
     }
 
-
     private void loadData() {
         loadJails();
         loadJailedPlayers();
     }
-
 
     private void loadJails() {
         jails.clear();
@@ -103,78 +101,85 @@ public class JailManager {
             float pitch = (float) jailsConfig.getDouble(path + ".pitch");
 
             JailData jail = new JailData(jailName, worldName, x, y, z, yaw, pitch);
-            jails.put(jailName, jail);
+            jails.put(jailName.toLowerCase(), jail);
         }
 
-        plugin.getLogger().info("Loaded  " + jails.size() + " jails");
+        plugin.getLogger().info("Loaded " + jails.size() + " jails");
     }
-
 
     private void loadJailedPlayers() {
         jailedPlayers.clear();
+        jailedPlayerUUIDs.clear();
 
         if (playersConfig.getConfigurationSection("players") == null) {
             return;
         }
 
         for (String uuidString : playersConfig.getConfigurationSection("players").getKeys(false)) {
-            String path = "players." + uuidString;
+            try {
+                String path = "players." + uuidString;
 
-            UUID uuid = UUID.fromString(uuidString);
-            String playerName = playersConfig.getString(path + ".name");
-            String jailName = playersConfig.getString(path + ".jail");
-            long jailTime = playersConfig.getLong(path + ".jail-time");
-            long startTime = playersConfig.getLong(path + ".start-time");
-            String reason = playersConfig.getString(path + ".reason", "No reason");
-            String jailedBy = playersConfig.getString(path + ".jailed-by", "Console");
+                UUID uuid = UUID.fromString(uuidString);
+                String playerName = playersConfig.getString(path + ".name");
+                String jailName = playersConfig.getString(path + ".jail");
+                long jailTime = playersConfig.getLong(path + ".jail-time");
+                long startTime = playersConfig.getLong(path + ".start-time");
+                String reason = playersConfig.getString(path + ".reason", "No reason");
+                String jailedBy = playersConfig.getString(path + ".jailed-by", "Console");
 
-            PlayerJailData jailData = new PlayerJailData(uuid, playerName, jailName, jailTime, reason, jailedBy);
+                PlayerJailData jailData = new PlayerJailData(uuid, playerName, jailName, jailTime, reason, jailedBy);
+                jailData.setStartTime(startTime);
 
-            String startTimePath = path + ".start-time";
-            if (playersConfig.contains(startTimePath)) {
-                long currentTime = System.currentTimeMillis() / 1000;
-                long elapsedTime = currentTime - startTime;
-                long remainingTime = Math.max(0, jailTime - elapsedTime);
 
-                if (remainingTime > 0) {
-                    jailData.setTime(remainingTime);
+                if (playersConfig.contains(path + ".previous-location")) {
+                    String prevPath = path + ".previous-location";
+                    String worldName = playersConfig.getString(prevPath + ".world");
+
+                    if (worldName != null && Bukkit.getWorld(worldName) != null) {
+                        double x = playersConfig.getDouble(prevPath + ".x");
+                        double y = playersConfig.getDouble(prevPath + ".y");
+                        double z = playersConfig.getDouble(prevPath + ".z");
+                        float yaw = (float) playersConfig.getDouble(prevPath + ".yaw");
+                        float pitch = (float) playersConfig.getDouble(prevPath + ".pitch");
+
+                        Location prevLocation = new Location(Bukkit.getWorld(worldName), x, y, z, yaw, pitch);
+                        jailData.setPreviousLocation(prevLocation);
+                    }
                 }
+
+                jailedPlayers.put(uuid, jailData);
+                jailedPlayerUUIDs.add(uuid);
+
+            } catch (IllegalArgumentException e) {
+                plugin.getLogger().warning("Invalid UUID in players data: " + uuidString);
             }
-
-
-            if (playersConfig.contains(path + ".previous-location")) {
-                String prevPath = path + ".previous-location";
-                String worldName = playersConfig.getString(prevPath + ".world");
-                double x = playersConfig.getDouble(prevPath + ".x");
-                double y = playersConfig.getDouble(prevPath + ".y");
-                double z = playersConfig.getDouble(prevPath + ".z");
-                float yaw = (float) playersConfig.getDouble(prevPath + ".yaw");
-                float pitch = (float) playersConfig.getDouble(prevPath + ".pitch");
-
-                if (worldName != null && Bukkit.getWorld(worldName) != null) {
-                    Location prevLocation = new Location(Bukkit.getWorld(worldName), x, y, z, yaw, pitch);
-                    jailData.setPreviousLocation(prevLocation);
-                }
-            }
-
-            jailedPlayers.put(uuid, jailData);
         }
 
-        plugin.getLogger().info("Loaded  " + jailedPlayers.size() + " prisoners");
+        plugin.getLogger().info("Loaded " + jailedPlayers.size() + " prisoners");
     }
 
-
     public boolean createJail(String name, Location location) {
-        if (jails.containsKey(name.toLowerCase())) {
+        if (!validateLocation(location)) {
             return false;
         }
 
-        JailData jail = new JailData(name.toLowerCase(), location);
-        jails.put(name.toLowerCase(), jail);
+        String jailName = name.toLowerCase();
+        if (jails.containsKey(jailName)) {
+            return false;
+        }
+
+        JailData jail = new JailData(jailName, location);
+        jails.put(jailName, jail);
         saveJails();
+
+
+        if (plugin.getLogManager() != null) {
+            plugin.getLogManager().logJailCreate("Console", jailName, location.getWorld().getName(),
+                    location.getX(), location.getY(), location.getZ());
+        }
+
         return true;
     }
-
 
     public boolean deleteJail(String name) {
         String jailName = name.toLowerCase();
@@ -190,9 +195,14 @@ public class JailManager {
 
         jails.remove(jailName);
         saveJails();
+
+
+        if (plugin.getLogManager() != null) {
+            plugin.getLogManager().logJailDelete("Console", jailName);
+        }
+
         return true;
     }
-
 
     public boolean jailPlayer(Player player, String jailName, long time, String reason, String jailedBy) {
         if (isPlayerJailed(player)) {
@@ -204,9 +214,13 @@ public class JailManager {
             return false;
         }
 
-
         Location currentLocation = player.getLocation();
+        Location jailLocation = jail.getLocation();
 
+        if (!validateLocation(jailLocation)) {
+            plugin.getLogger().warning("Invalid jail location for: " + jailName);
+            return false;
+        }
 
         PlayerJailData jailData = new PlayerJailData(
                 player.getUniqueId(),
@@ -219,27 +233,47 @@ public class JailManager {
         jailData.setPreviousLocation(currentLocation);
 
 
-        Location jailLocation = jail.getLocation();
-        if (jailLocation != null) {
-            player.teleport(jailLocation);
-        }
+        player.teleport(jailLocation);
 
 
         jailedPlayers.put(player.getUniqueId(), jailData);
+        jailedPlayerUUIDs.add(player.getUniqueId());
 
         savePlayers();
 
+
+        if (configManager.isSoundsEnabled()) {
+            try {
+                Sound sound = Registry.SOUNDS.get(NamespacedKey.minecraft(configManager.getJailSound().toLowerCase()));
+                player.playSound(player.getLocation(), sound, 1.0f, 1.0f);
+            } catch (IllegalArgumentException e) {
+                plugin.getLogger().warning("Invalid jail sound: " + configManager.getJailSound());
+            }
+        }
+
+
         if (configManager.isBroadcastJail()) {
-            Component comp = localizationManager.getMessage("jail.broadcast", player.getName(), reason, formatTime(time));
+            Component comp = localizationManager.getMessage("jail.broadcast",
+                    player.getName(), reason, TimeUtils.formatTime(time));
             Bukkit.broadcast(comp);
         }
 
+
         localizationManager.sendMessage(player, "jail.jailed",
-                jailName, formatTime(time), reason);
+                jailName, TimeUtils.formatTime(time), reason);
+
+
+        if (plugin.getStatisticsManager() != null) {
+            plugin.getStatisticsManager().addJailRecord(player.getUniqueId(), time, reason);
+        }
+
+
+        if (plugin.getLogManager() != null) {
+            plugin.getLogManager().logJail(player.getName(), jailedBy, jailName, time, reason);
+        }
 
         return true;
     }
-
 
     public boolean unjailPlayer(UUID playerUuid) {
         PlayerJailData jailData = jailedPlayers.remove(playerUuid);
@@ -247,18 +281,29 @@ public class JailManager {
             return false;
         }
 
+        jailedPlayerUUIDs.remove(playerUuid);
+
         Player player = Bukkit.getPlayer(playerUuid);
-        if (player != null) {
+        if (player != null && player.isOnline()) {
             Location returnLocation = jailData.getPreviousLocation();
-            if (returnLocation != null) {
+            if (returnLocation != null && validateLocation(returnLocation)) {
                 player.teleport(returnLocation);
             } else {
+                // Fallback to spawn
                 player.teleport(player.getWorld().getSpawnLocation());
             }
 
 
-            localizationManager.sendMessage(player, "jail.unjailed");
+            if (configManager.isSoundsEnabled()) {
+                try {
+                    Sound sound = Registry.SOUNDS.get(NamespacedKey.minecraft(configManager.getUnjailSound().toLowerCase()));
+                    player.playSound(player.getLocation(), sound, 1.0f, 1.0f);
+                } catch (IllegalArgumentException e) {
+                    plugin.getLogger().warning("Invalid unjail sound: " + configManager.getUnjailSound());
+                }
+            }
 
+            localizationManager.sendMessage(player, "jail.unjailed");
 
             if (configManager.isBroadcastUnjail()) {
                 Component comp = localizationManager.getMessage("jail.unjail-broadcast", player.getName());
@@ -267,9 +312,14 @@ public class JailManager {
         }
 
         savePlayers();
+
+
+        if (plugin.getLogManager() != null) {
+            plugin.getLogManager().logUnjail(jailData.getPlayerName(), "System", "Time expired");
+        }
+
         return true;
     }
-
 
     public boolean unjailPlayer(String playerName) {
         UUID uuid = jailedPlayers.values().stream()
@@ -283,69 +333,77 @@ public class JailManager {
 
 
     public boolean isPlayerJailed(Player player) {
-        return jailedPlayers.containsKey(player.getUniqueId());
+        return jailedPlayerUUIDs.contains(player.getUniqueId());
     }
-
 
     public PlayerJailData getJailData(Player player) {
         return jailedPlayers.get(player.getUniqueId());
     }
 
+    public PlayerJailData getJailData(UUID uuid) {
+        return jailedPlayers.get(uuid);
+    }
 
     public JailData getJail(String name) {
         return jails.get(name.toLowerCase());
     }
 
-
     public Collection<JailData> getAllJails() {
-        return jails.values();
+        return new ArrayList<>(jails.values());
     }
-
 
     public Collection<PlayerJailData> getAllJailedPlayers() {
-        return jailedPlayers.values();
+        return new ArrayList<>(jailedPlayers.values());
     }
 
-
     private void startJailTimer() {
+        timerRunning = true;
         jailTimer = new BukkitRunnable() {
             @Override
             public void run() {
-                checkJailTimes();
+                if (timerRunning) {
+                    checkJailTimes();
+                }
             }
         };
 
-        jailTimer.runTaskTimer(plugin, 200L, 200L);
+        long interval = configManager.getCheckInterval();
+        jailTimer.runTaskTimer(plugin, interval, interval);
     }
 
-
     private void checkJailTimes() {
+        if (jailedPlayers.isEmpty()) {
+            return;
+        }
+
         List<UUID> toRelease = new ArrayList<>();
+        long currentTime = System.currentTimeMillis() / 1000;
 
         for (PlayerJailData jailData : jailedPlayers.values()) {
-            if (jailData.isExpired()) {
+            if (jailData.getStartTime() + jailData.getJailTime() <= currentTime) {
                 toRelease.add(jailData.getPlayerUuid());
             }
         }
 
-        for (UUID uuid : toRelease) {
-            unjailPlayer(uuid);
+        if (!toRelease.isEmpty()) {
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                for (UUID uuid : toRelease) {
+                    unjailPlayer(uuid);
+                }
+            });
         }
     }
 
+    private boolean validateLocation(Location location) {
+        if (location == null) return false;
+        if (location.getWorld() == null) return false;
 
-    private String formatTime(long seconds) {
-        if (seconds < 60) {
-            return seconds + " s";
-        } else if (seconds < 3600) {
-            return (seconds / 60) + " m";
-        } else if (seconds < 86400) {
-            return (seconds / 3600) + " h";
-        } else {
-            return (seconds / 86400) + " d";
+        if (!location.getWorld().isChunkLoaded(location.getBlockX() >> 4, location.getBlockZ() >> 4)) {
+            location.getWorld().loadChunk(location.getBlockX() >> 4, location.getBlockZ() >> 4);
         }
-    }
 
+        return true;
+    }
 
     public void saveJails() {
         jailsConfig.set("jails", null);
@@ -363,10 +421,9 @@ public class JailManager {
         try {
             jailsConfig.save(jailsFile);
         } catch (IOException e) {
-            plugin.getLogger().log(Level.SEVERE, "Error when try to save jails.yml", e);
+            plugin.getLogger().log(Level.SEVERE, "Error saving jails.yml", e);
         }
     }
-
 
     public void savePlayers() {
         playersConfig.set("players", null);
@@ -395,20 +452,19 @@ public class JailManager {
         try {
             playersConfig.save(playersFile);
         } catch (IOException e) {
-            plugin.getLogger().log(Level.SEVERE, "Error when try to save players.yml", e);
+            plugin.getLogger().log(Level.SEVERE, "Error saving players.yml", e);
         }
     }
-
 
     public void saveAllData() {
         saveJails();
         savePlayers();
     }
 
-
     public void reloadData() {
         if (jailTimer != null) {
             jailTimer.cancel();
+            timerRunning = false;
         }
 
         loadData();
@@ -416,11 +472,14 @@ public class JailManager {
         plugin.getLogger().info("JailPlus data reloaded!");
     }
 
-
     public void shutdown() {
+        timerRunning = false;
         if (jailTimer != null) {
             jailTimer.cancel();
         }
         saveAllData();
+        jails.clear();
+        jailedPlayers.clear();
+        jailedPlayerUUIDs.clear();
     }
 }

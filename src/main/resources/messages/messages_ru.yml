@@ -1,110 +1,123 @@
-# ======================================
-#    Русская локализация JailPlus
-# ======================================
+# ===================================
+# Русская локализация JailPlus
+# ===================================
 
-prefix: "<gray>[<gold>JailPlus</gold>]</gray>"
-no-permission: "{prefix}<red>У вас нет разрешения на выполнение этой команды!</red>"
-command-not-found: "{prefix}<red>Команда не найдена!</red>"
-player-not-found: "{prefix}<red>Игрок <yellow>{0}</yellow> не найден!</red>"
-reload-success: "{prefix}<green>Конфигурация успешно перезагружена!</green>"
+prefix: "[JailPlus]"
+no-permission: "{prefix}&cУ вас нет разрешения на выполнение этой команды!"
+command-not-found: "{prefix}&cКоманда не найдена!"
+player-not-found: "{prefix}&cИгрок {0} не найден!"
+reload-success: "{prefix}&aКонфигурация успешно перезагружена!"
 
 jail:
-  usage: "{prefix}<red>Использование: <yellow>/jail player <игрок> [время] [причина]</yellow></red>"
-  already-jailed: "{prefix}<red>Игрок <yellow>{0}</yellow> уже находится в тюрьме!</red>"
-  invalid-time: "{prefix}<red>Неверное время заключения!</red>"
-  invalid-time-format: "{prefix}<red>Неверный формат времени! Используйте: 30s, 5m, 2h, 1d</red>"
-  time-too-long: "{prefix}<red>Максимальное время заключения: <yellow>{0}</yellow></red>"
-  no-available-jails: "{prefix}<red>Нет доступных тюрем!</red>"
-  success: "{prefix}<green>Игрок <yellow>{0}</yellow> заключен на <yellow>{1}</yellow> по причине: <yellow>{2}</yellow></green>"
-  failed: "{prefix}<red>Не удалось заключить игрока <yellow>{0}</yellow></red>"
+  usage: "{prefix}&cИспользование: /jail player <игрок> [тюрьма] [время] [причина]"
+  already-jailed: "{prefix}&cИгрок {0} уже находится в тюрьме!"
+  invalid-time: "{prefix}&cНеверное время заключения!"
+  invalid-time-format: "{prefix}&cНеверный формат времени! Используйте: 30s, 5m, 2h, 1d"
+  time-too-long: "{prefix}&cМаксимальное время заключения: {0}"
+  no-available-jails: "{prefix}&cНет доступных тюрем!"
+  success: "{prefix}&aИгрок {0} заключен на {1}. Причина: {2}"
+  failed: "{prefix}&cНе удалось заключить игрока {0}"
 
-  jailed: "{prefix}<red>Вы заключены в тюрьму <yellow>{0}</yellow> на <yellow>{1}</yellow> по причине: <yellow>{2}</yellow></red>"
-  unjailed: "{prefix}<green>Вы были освобождены из тюрьмы!</green>"
-  login-message: "{prefix}<red>Вы находитесь в тюрьме <yellow>{0}</yellow><red>. Оставшееся время: <yellow>{1}</yellow><red>. Причина: <yellow>{2}</yellow></red>"
+  jailed: "{prefix}&cВы заключены в тюрьму {0} на {1}. Причина: {2}"
+  unjailed: "{prefix}&aВы были освобождены из тюрьмы!"
+  login-message: "{prefix}&eВы находитесь в тюрьме {0}. Оставшееся время: {1}. Причина: {2}"
 
-  broadcast: "{prefix}<yellow>{0}</yellow> <red>был заключен в тюрьму на <yellow>{2}</yellow> по причине: <yellow>{1}</yellow></red>"
-  unjail-broadcast: "{prefix}<yellow>{0}</yellow> <green>был освобожден из тюрьмы!</green>"
+  broadcast: "{prefix}&e{0} был заключен в тюрьму на {1}. Причина: {2}"
+  unjail-broadcast: "{prefix}&a{0} был освобожден из тюрьмы!"
 
-  command-blocked: "{prefix}<red>В тюрьме нельзя использовать команды!</red>"
-  teleport-blocked: "{prefix}<red>В тюрьме нельзя телепортироваться!</red>"
-  action-blocked: "{prefix}<red>В тюрьме нельзя выполнять это действие!</red>"
-  pvp-blocked: "{prefix}<red>В тюрьме нельзя сражаться!</red>"
-  inventory-blocked: "{prefix}<red>В тюрьме нельзя открывать инвентари!</red>"
-  cannot-attack-prisoner: "{prefix}<red>Нельзя атаковать заключенного!</red>"
+  command-blocked: "{prefix}&cВ тюрьме нельзя использовать команды!"
+  teleport-blocked: "{prefix}&cВ тюрьме нельзя телепортироваться!"
+  action-blocked: "{prefix}&cВ тюрьме нельзя выполнять это действие!"
+  pvp-blocked: "{prefix}&cВ тюрьме нельзя сражаться!"
+  inventory-blocked: "{prefix}&cВ тюрьме нельзя открывать инвентари!"
+  cannot-attack-prisoner: "{prefix}&cНельзя атаковать заключенного!"
 
-  chat-prefix: "{prefix}<gray>[<red>ЗАКЛЮЧЕННЫЙ</red>]</gray>"
+  chat-prefix: "&c[ЗАКЛЮЧЕННЫЙ]"
 
-  list-empty: "{prefix}<yellow>Сейчас никто не находится в тюрьме.</yellow>"
-  list-header: "{prefix}<gold>=== Список заключенных ===</gold>"
-  list-entry: "{prefix}<yellow>{0} <gray>- Тюрьма: <white>{1} <gray>- Время: <white>{2} <gray>- Причина: <white>{3}</white></gray></yellow>"
+  list-empty: "{prefix}&7Сейчас никто не находится в тюрьме."
+  list-header: "{prefix}&e=== Список заключенных ==="
+  list-entry: "{prefix}&f{0} &7- Тюрьма: &e{1} &7- Время: &a{2} &7- Причина: &f{3}"
 
-  not-jailed: "{prefix}<red>Игрок <yellow>{0}</yellow> не находится в тюрьме!</red>"
-  you-not-jailed: "{prefix}<red>Ты не находишься в тюрьме!</red>"
-  info-usage: "{prefix}<red>Использование: <yellow>/jail info <игрок></yellow></red>"
+  not-jailed: "{prefix}&7Игрок {0} не находится в тюрьме!"
+  you-not-jailed: "{prefix}&7Ты не находишься в тюрьме!"
+  info-usage: "{prefix}&cИспользование: /jail info <игрок>"
   info: |
-    <gold>=== Информация о заключенном ===</gold>
-    <yellow>Игрок: <white>{0}</white></yellow>
-    <yellow>Тюрьма: <white>{1}</white></yellow>
-    <yellow>Оставшееся время: <white>{2}</white></yellow>
-    <yellow>Причина: <white>{3}</white></yellow>
-    <yellow>Заключил: <white>{4}</white></yellow>
+    &e=== Информация о заключенном ===
+    &fИгрок: &a{0}
+    &fТюрьма: &e{1}
+    &fОставшееся время: &a{2}
+    &fПричина: &f{3}
+    &fЗаключил: &e{4}
   your-info: |
-    <red>=== Информация о вашем заключении ===</red>
-    <yellow>Тюрьма: <white>{0}</white></yellow>
-    <yellow>Оставшееся время: <white>{1}</white></yellow>
-    <yellow>Причина: <white>{2}</white></yellow>
-    <yellow>Заключил: <white>{3}</white></yellow>
-    <gray>Используйте <yellow>/jail info</yellow> <gray>для проверки статуса заключения</gray>
+    &e=== Информация о вашем заключении ===
+    &fТюрьма: &e{0}
+    &fОставшееся время: &a{1}
+    &fПричина: &f{2}
+    &fЗаключил: &e{3}
 
-  time-usage: "{prefix}<red>Использование: <yellow>/jail time <игрок> <add/remove/set> <время></yellow></red>"
-  time-added: "{prefix}<green>Добавлено <yellow>{1}</yellow> времени заключения для игрока <yellow>{0}</yellow></green>"
-  time-removed: "{prefix}<green>Убрано <yellow>{1}</yellow> времени заключения для игрока <yellow>{0}</yellow></green>"
-  time-set: "{prefix}<green>Время заключения для игрока <yellow>{0}</yellow> установлено на <yellow>{1}</yellow></green>"
+  time-usage: "{prefix}&cИспользование: /jailadmin time <игрок> <действие> <время>"
+  time-added: "{prefix}&aДобавлено {1} времени заключения для игрока {0}"
+  time-removed: "{prefix}&aУбрано {1} времени заключения для игрока {0}"
+  time-set: "{prefix}&aВремя заключения для игрока {0} установлено на {1}"
 
-  help-header: "<gold>=== Справка по командам JailPlus ===</gold>"
-  help-jail: "<yellow>/jail player <игрок> [время] [причина] <gray>- Заключить игрока</gray>"
-  help-list: "<yellow>/jail list <gray>- Список заключенных</gray>"
-  help-info: "<yellow>/jail info <игрок> <gray>- Информация о заключенном</gray>"
+  help-header: "&e=== Справка по командам JailPlus ==="
+  help-jail: "&f/jail player <игрок> [тюрьма] [время] [причина] &7- Заключить игрока"
+  help-list: "&f/jail list &7- Список заключенных"
+  help-info: "&f/jail info [игрок] &7- Информация о заключенном"
 
 unjail:
-  usage: "{prefix}<red>Использование: <yellow>/unjail <игрок></yellow></red>"
-  success: "{prefix}<green>Игрок <yellow>{0}</yellow> успешно освобожден!</green>"
-  failed: "{prefix}<red>Не удалось освободить игрока <yellow>{0}</yellow></red>"
-  not-found: "{prefix}<red>Заключенный с именем <yellow>{0}</yellow> не найден!</red>"
+  usage: "{prefix}&cИспользование: /unjail <игрок>"
+  success: "{prefix}&aИгрок {0} успешно освобожден!"
+  failed: "{prefix}&cНе удалось освободить игрока {0}"
+  not-found: "{prefix}&cЗаключенный с именем {0} не найден!"
 
 admin:
-  player-only: "{prefix}<red>Эта команда доступна только игрокам!</red>"
-  unknown-command: "{prefix}<red>Неизвестная команда: <yellow>{0}</yellow></red>"
+  player-only: "{prefix}&cЭта команда доступна только игрокам!"
+  unknown-command: "{prefix}&cНеизвестная команда: {0}"
 
-  create-usage: "{prefix}<red>Использование: <yellow>/jailadmin create <название></yellow></red>"
-  jail-exists: "{prefix}<red>Тюрьма с названием <yellow>{0}</yellow> уже существует!</red>"
-  jail-created: "{prefix}<green>Тюрьма <yellow>{0}</yellow> успешно создана!</green>"
-  jail-create-failed: "{prefix}<red>Не удалось создать тюрьму <yellow>{0}</yellow></red>"
+  create-usage: "{prefix}&cИспользование: /jailadmin create <название>"
+  jail-exists: "{prefix}&cТюрьма с названием {0} уже существует!"
+  jail-created: "{prefix}&aТюрьма {0} успешно создана!"
+  jail-create-failed: "{prefix}&cНе удалось создать тюрьму {0}"
 
-  delete-usage: "{prefix}<red>Использование: <yellow>/jailadmin delete <название></yellow></red>"
-  jail-not-exists: "{prefix}<red>Тюрьма с названием <yellow>{0}</yellow> не существует!</red>"
-  jail-deleted: "{prefix}<green>Тюрьма <yellow>{0}</yellow> успешно удалена!</green>"
-  jail-delete-failed: "{prefix}<red>Не удалось удалить тюрьму <yellow>{0}</yellow></red>"
+  delete-usage: "{prefix}&cИспользование: /jailadmin delete <название>"
+  jail-not-exists: "{prefix}&cТюрьма с названием {0} не существует!"
+  jail-deleted: "{prefix}&aТюрьма {0} успешно удалена!"
+  jail-delete-failed: "{prefix}&cНе удалось удалить тюрьму {0}"
 
-  no-jails: "{prefix}<yellow>Тюрьмы не созданы.</yellow>"
-  jails-header: "<gold>=== Список тюрем ===</gold>"
-  jail-entry: "<yellow>{0}</yellow> <gray>-</gray> Мир: <white>{1} <gray>-</gray> Координаты: <white>{2}, {3}, {4} Заключенные: <white>{5}</white>"
+  no-jails: "{prefix}&7Тюрьмы не созданы."
+  jails-header: "&e=== Список тюрем ==="
+  jail-entry: "&e{0} &7- Мир: &f{1} &7- Координаты: &f{2}, {3}, {4} &7- Заключенных: &a{5}"
 
-  info-usage: "{prefix}<red>Использование: <yellow>/jailadmin info <название></yellow></red>"
+  info-usage: "{prefix}&cИспользование: /jailadmin info <название>"
   jail-info: |
-    <gold>=== Информация о тюрьме ===</gold>
-    <yellow>Название: <white>{0}</white></yellow>
-    <yellow>Мир: <white>{1}</white></yellow>
-    <yellow>Координаты: <white>{2}, {3}, {4}</white></yellow>
-    <yellow>Заключенных: <white>{5}</white></yellow>
+    &e=== Информация о тюрьме ===
+    &fНазвание: &e{0}
+    &fМир: &f{1}
+    &fКоординаты: &f{2}, {3}, {4}
+    &fЗаключенных: &a{5}
 
-  reload-success: "{prefix}<green>Плагин успешно перезагружен за <yellow>{0}</yellow>мс!</green>"
-  reload-failed: "{prefix}<red>Ошибка при перезагрузке: <yellow>{0}</yellow></red>"
+  reload-success: "{prefix}&aПлагин успешно перезагружен за {0}мс!"
+  reload-failed: "{prefix}&cОшибка при перезагрузке: {0}"
 
-  help-header: "<gold>=== Справка по админ-командам ===</gold>"
-  help-create: "<yellow>/jailadmin create <название> <gray>- Создать тюрьму</gray>"
-  help-delete: "<yellow>/jailadmin delete <название> <gray>- Удалить тюрьму</gray>"
-  help-list: "<yellow>/jailadmin list <gray>- Список тюрем</gray>"
-  help-info: "<yellow>/jailadmin info <название> <gray>- Информация о тюрьме</gray>"
-  help-reload: "<yellow>/jailadmin reload <gray>- Перезагрузить плагин</gray>"
-  help-time: "<yellow>/jailadmin time <игрок> <add/remove/set> <время> <gray>- Управление временем</gray>"
+  logs-disabled: "{prefix}&cЛогирование отключено в конфигурации!"
+  no-logs: "{prefix}&7Логи не найдены."
+  logs-header: "&e=== Последние логи ==="
+
+  stats-disabled: "{prefix}&cСтатистика отключена в конфигурации!"
+  stats-header: "&e=== Статистика JailPlus ==="
+  stats-general: "&fВсего тюрем: &e{0} &7| &fАктивных заключенных: &a{1}"
+
+  placeholders-disabled: "{prefix}&cИнтеграция с PlaceholderAPI отключена!"
+  placeholders-header: "&e=== Доступные плейсхолдеры ==="
+
+  help-header: "&e=== Справка по админ-командам ==="
+  help-create: "&f/jailadmin create <название> &7- Создать тюрьму"
+  help-delete: "&f/jailadmin delete <название> &7- Удалить тюрьму"
+  help-list: "&f/jailadmin list &7- Список тюрем"
+  help-info: "&f/jailadmin info <название> &7- Информация о тюрьме"
+  help-reload: "&f/jailadmin reload &7- Перезагрузить плагин"
+  help-time: "&f/jailadmin time <игрок> <действие> <время> &7- Управление временем"
+  help-logs: "&f/jailadmin logs [фильтр] &7- Просмотр логов"
+  help-stats: "&f/jailadmin stats [игрок] &7- Просмотр статистики"
+  help-placeholders: "&f/jailadmin placeholders &7- Список доступных плейсхолдеров"

@@ -1,24 +1,143 @@
-# ======================================
-#         JailPlus Configuration
-# ======================================
+# ===================================
+# JailPlus Configuration
+# ===================================
 
-
+# Locale
+# Basically support 'ru', 'en'
 locale: "en"
 
+# Use prefix in plugin messages
 use-prefix: true
 
-max-jail-time: 86400
+# ===================================
+# Prison settings
+# ===================================
 
+# Max jail time in seconds
+# use 0 to disable limit
+max-jail-time: 604800
+
+# Time to check valid conclusions (in ticks, 20 ticks = 1 second)
+check-interval: 600
+
+# Automatically release when time expires
+auto-release: true
+
+# ===================================
+# Notification settings
+# ===================================
+
+#Notify server about conclusion
 broadcast-jail: true
+
+# Notify server when released
 broadcast-unjail: true
 
+# Notify player of time every X minutes
+# use 0 to disable
+notify-interval: 30
+
+#Notify administrators when concluding
+notify-admins: true
+
+# Rights to receive notifications
+admin-notification-permission: "jailplus.admin.notify"
+
+# ===================================
+# Restrictions for prisoners
+# ===================================
+
+# Disable the use of commands
 prevent-command-usage: true
 
-# Command whitelist when player is jailed
+# Authorized Commands for Prisoners
 unblocked-commands:
   - "tell"
   - "say"
   - "msg"
   - "server"
+  - "help"
+  - "rules"
 
+# Disable block breaking
+prevent-block-break: true
+
+# Disable installation of blocks
+prevent-block-place: true
+
+# Block PvP
+prevent-pvp: true
+
+# Prevent opening inventories
+prevent-inventory: true
+
+# Disable teleportation
+prevent-teleport: true
+
+# Prevent mobs/players from damaging prisoners
+prevent-damage-to-prisoners: true
+
+# ===================================
+# Advanced Features
+# ===================================
+
+# Enable logging system
+enable-logging: true
+
+# Maximum number of logs
+# use 0 to disable limit
+max-log-entries: 100
+
+# Enable player statistics
+enable-statistics: true
+
+# ===================================
+# Effects and sounds
+# ===================================
+
+# Turn on sound effects
+enable-sounds: true
+
+# Sound when concluding
+jail-sound: "ENTITY_IRON_GOLEM_ATTACK"
+
+# Sound when released
+unjail-sound: "ENTITY_PLAYER_LEVELUP"
+
+# Enable particle effects
+enable-particles: true
+
+# Particles around prisoners
+prisoner-particle: "SMOKE_NORMAL"
+
+# ===================================
+# Database (experimental)
+# ===================================
+
+# Database type (YAML/MYSQL)
+database-type: "YAML"
+
+# MySQL settings (if used)
+mysql:
+  host: "localhost"
+  port: 3306
+  database: "jailplus"
+  username: "user"
+  password: "password"
+  table-prefix: "jp_"
+
+# ===================================
+# PlaceholderAPI
+# ===================================
+
+# Enable integration with PlaceholderAPI
+enable-placeholderapi: true
+
+# Cache placeholder results (improves performance)
+cache-placeholders: true
+
+# Placeholder caching time in milliseconds
+placeholder-cache-time: 5000
+
+# Debug mode
 debug: false

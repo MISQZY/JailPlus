@@ -31,7 +31,7 @@ public class JailCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender,@NotNull Command command,@NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args.length == 0) {
             showHelp(sender);
             return true;
@@ -57,17 +57,15 @@ public class JailCommand implements CommandExecutor, TabCompleter {
                 break;
 
             default:
-                localizationManager.sendMessage( sender, "no-permission");
+                localizationManager.sendMessage(sender, "no-permission");
                 break;
         }
 
         return true;
     }
 
-
     private void handleJailCommand(CommandSender sender, String[] args) {
-        if ((sender instanceof Player player)
-                && (!sender.hasPermission("jailplus.jail.player"))) {
+        if ((sender instanceof Player player) && (!sender.hasPermission("jailplus.jail.player"))) {
             localizationManager.sendMessage(player, "no-permission");
             return;
         }
@@ -91,11 +89,12 @@ public class JailCommand implements CommandExecutor, TabCompleter {
         }
 
         String jailName = null;
-        long jailTime = 1800;
+        long jailTime = 1800; // Default 30 minutes
         String reason = "No reason";
 
         int index = 2;
 
+        // Try to find jail name
         if (args.length > index) {
             String possibleJailName = args[index];
             if (jailManager.getJail(possibleJailName) != null) {
@@ -104,6 +103,7 @@ public class JailCommand implements CommandExecutor, TabCompleter {
             }
         }
 
+        // Use default jail if none specified
         if (jailName == null) {
             jailName = jailManager.getAllJails().stream()
                     .map(JailData::getName)
@@ -116,10 +116,12 @@ public class JailCommand implements CommandExecutor, TabCompleter {
             return;
         }
 
+        // Parse time
         if (args.length > index) {
             try {
                 jailTime = TimeUtils.parseTime(args[index]);
                 index++;
+
                 if (jailTime <= 0) {
                     localizationManager.sendMessage(sender, "jail.invalid-time");
                     return;
@@ -136,6 +138,7 @@ public class JailCommand implements CommandExecutor, TabCompleter {
             }
         }
 
+        // Parse reason
         if (args.length > index) {
             reason = String.join(" ", Arrays.copyOfRange(args, index, args.length));
         }
@@ -151,16 +154,14 @@ public class JailCommand implements CommandExecutor, TabCompleter {
         }
     }
 
-
     private void handleListCommand(CommandSender sender, String[] args) {
-        if ((sender instanceof Player player)
-                && (!sender.hasPermission("jailplus.jail.list"))) {
+        if ((sender instanceof Player player) && (!sender.hasPermission("jailplus.jail.list"))) {
             localizationManager.sendMessage(player, "no-permission");
             return;
         }
 
         if (jailManager.getAllJailedPlayers().isEmpty()) {
-            localizationManager.sendMessage( sender, "jail.list-empty");
+            localizationManager.sendMessage(sender, "jail.list-empty");
             return;
         }
 
@@ -177,10 +178,9 @@ public class JailCommand implements CommandExecutor, TabCompleter {
         }
     }
 
-
     private void handleInfoCommand(CommandSender sender, String[] args) {
         if (!sender.hasPermission("jailplus.jail.info") && sender instanceof Player) {
-                localizationManager.sendMessage(sender, "no-permission");
+            localizationManager.sendMessage(sender, "no-permission");
             return;
         }
 
@@ -189,7 +189,7 @@ public class JailCommand implements CommandExecutor, TabCompleter {
 
         if (args.length < 2) {
             if (!(sender instanceof Player)) {
-                localizationManager.sendMessage(sender,"no-permission");
+                localizationManager.sendMessage(sender, "no-permission");
                 return;
             }
 
@@ -210,7 +210,7 @@ public class JailCommand implements CommandExecutor, TabCompleter {
             if (args.length < 2) {
                 localizationManager.sendMessage(sender, "jail.you-not-jailed");
             } else {
-                    localizationManager.sendMessage(sender, "jail.not-jailed", targetPlayer.getName());
+                localizationManager.sendMessage(sender, "jail.not-jailed", targetPlayer.getName());
             }
             return;
         }
@@ -219,20 +219,19 @@ public class JailCommand implements CommandExecutor, TabCompleter {
         String timeFormatted = TimeUtils.formatTime(remainingTime);
 
         if (args.length < 2) {
-            if(sender.hasPermission("jailplus.jail.info.own")) {
+            if (sender.hasPermission("jailplus.jail.info.own")) {
                 localizationManager.sendMessage(sender, "jail.your-info",
                         jailData.getJailName(),
                         timeFormatted,
                         jailData.getReason(),
                         jailData.getJailedBy()
                 );
-            }
-            else {
+            } else {
                 localizationManager.sendMessage(sender, "no-permission");
             }
         } else {
             if (sender instanceof Player) {
-                if(sender.hasPermission("jailplus.jail.info.other")) {
+                if (sender.hasPermission("jailplus.jail.info.other")) {
                     localizationManager.sendMessage(sender, "jail.info",
                             jailData.getPlayerName(),
                             jailData.getJailName(),
@@ -244,7 +243,7 @@ public class JailCommand implements CommandExecutor, TabCompleter {
                     localizationManager.sendMessage(sender, "no-permission");
                 }
             } else {
-                localizationManager.sendMessage(sender,"jail.info",
+                localizationManager.sendMessage(sender, "jail.info",
                         jailData.getPlayerName(),
                         jailData.getJailName(),
                         timeFormatted,
@@ -255,9 +254,8 @@ public class JailCommand implements CommandExecutor, TabCompleter {
         }
     }
 
-
     private void showHelp(CommandSender sender) {
-        localizationManager.sendMessage( sender, "jail.help-header");
+        localizationManager.sendMessage(sender, "jail.help-header");
         localizationManager.sendMessage(sender, "jail.help-jail");
         localizationManager.sendMessage(sender, "jail.help-list");
         localizationManager.sendMessage(sender, "jail.help-info");
@@ -281,8 +279,6 @@ public class JailCommand implements CommandExecutor, TabCompleter {
                         .toList();
                 completions.addAll(jailNames);
                 completions.addAll(Arrays.asList("30m", "1h", "2h", "1d", "permanent"));
-            } else if (args[0].equalsIgnoreCase("info")) {
-                Bukkit.getOnlinePlayers().forEach(player -> completions.add(player.getName()));
             }
         } else if (args.length == 4) {
             if (args[0].equalsIgnoreCase("player")) {
@@ -292,5 +288,4 @@ public class JailCommand implements CommandExecutor, TabCompleter {
 
         return completions;
     }
-
 }
