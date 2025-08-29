@@ -38,6 +38,7 @@ permissions:
       jailplus.bypass: true
       jailplus.notify: true
       jailplus.placeholders: true
+      jailplus.scoreboard.*: true
     default: op
 
   jailplus.jail:
@@ -101,6 +102,7 @@ permissions:
       jailplus.admin.logs: true
       jailplus.admin.stats: true
       jailplus.admin.notify: true
+      jailplus.admin.scoreboard: true
     default: op
 
   jailplus.admin.create:
@@ -134,6 +136,26 @@ permissions:
   jailplus.admin.notify:
     description: Receive admin notifications about jails
     default: op
+
+  jailplus.admin.scoreboard:
+    description: Access to scoreboard management commands
+    default: op
+
+  jailplus.scoreboard.*:
+    description: Access to all scoreboard features
+    children:
+      jailplus.scoreboard.view: true
+      jailplus.scoreboard.bypass: true
+    default: op
+
+  jailplus.scoreboard.view:
+    description: View jail scoreboard information
+    default: true
+
+  jailplus.scoreboard.bypass:
+    description: Bypass scoreboard restrictions (admin override)
+    default: op
+
 
   jailplus.bypass:
     description: Bypass all jail restrictions

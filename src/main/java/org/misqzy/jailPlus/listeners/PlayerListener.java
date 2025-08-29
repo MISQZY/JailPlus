@@ -10,6 +10,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.*;
+import org.misqzy.jailPlus.JailPlus;
 import org.misqzy.jailPlus.data.PlayerJailData;
 import org.misqzy.jailPlus.managers.ConfigManager;
 import org.misqzy.jailPlus.managers.JailManager;
@@ -21,11 +22,13 @@ import java.util.Set;
 
 public class PlayerListener implements Listener {
 
+    private final JailPlus plugin;
     private final JailManager jailManager;
     private final LocalizationManager localizationManager;
     private final ConfigManager configManager;
 
-    public PlayerListener(JailManager jailManager, LocalizationManager localizationManager, ConfigManager configManager) {
+    public PlayerListener(JailPlus plugin, JailManager jailManager, LocalizationManager localizationManager, ConfigManager configManager) {
+        this.plugin = plugin;
         this.jailManager = jailManager;
         this.localizationManager = localizationManager;
         this.configManager = configManager;
@@ -49,6 +52,12 @@ public class PlayerListener implements Listener {
                 player.teleport(jailManager.getJail(jailName).getLocation());
             }
 
+            if (configManager.isScoreboardEnabled()) {
+                if (plugin.getScoreboardManager() != null) {
+                    plugin.getScoreboardManager().showJailScoreboard(player, jailData);
+                }
+            }
+
             localizationManager.sendMessage(player, "jail.login-message",
                     jailData.getJailName(),
                     TimeUtils.formatTime(jailData.getRemainingTime()),
@@ -63,6 +72,12 @@ public class PlayerListener implements Listener {
 
         if (jailManager.isPlayerJailed(player)) {
             jailManager.savePlayers();
+        }
+
+        if (configManager.isScoreboardEnabled()) {
+            if (plugin.getScoreboardManager() != null) {
+                plugin.getScoreboardManager().hideJailScoreboard(player);
+            }
         }
     }
 
@@ -111,7 +126,7 @@ public class PlayerListener implements Listener {
         // Check unblocked commands
         for (String allowed : unblockedCommands) {
             if (commandName.equals(allowed) || commandName.startsWith(allowed + ":")) {
-                return; // Allow this command
+                return;
             }
         }
 
@@ -214,17 +229,42 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void onPlayerChat(AsyncPlayerChatEvent event) {
+//    @EventHandler(priority = EventPriority.NORMAL)
+//    public void onPlayerChat(AsyncPlayerChatEvent event) {
+//        Player player = event.getPlayer();
+//
+//        if (jailManager.isPlayerJailed(player)) {
+//            PlayerJailData jailData = jailManager.getJailData(player);
+//            if (jailData != null) {
+//                // Add prisoner prefix to chat
+//                String prefix = localizationManager.getRawMessage("jail.chat-prefix");
+//                event.setFormat(prefix + " " + event.getFormat());
+//            }
+//        }
+//    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerWorldChange(PlayerChangedWorldEvent event) {
         Player player = event.getPlayer();
 
-        if (jailManager.isPlayerJailed(player)) {
-            PlayerJailData jailData = jailManager.getJailData(player);
-            if (jailData != null) {
-                // Add prisoner prefix to chat
-                String prefix = localizationManager.getRawMessage("jail.chat-prefix");
-                event.setFormat(prefix + " " + event.getFormat());
+        if (jailManager.isPlayerJailed(player) && plugin.getScoreboardManager() != null) {
+            if (configManager.isScoreboardOnlyInJailWorld()) {
+                PlayerJailData jailData = jailManager.getJailData(player);
+                if (jailData != null) {
+                    var jail = jailManager.getJail(jailData.getJailName());
+                    if (jail != null) {
+                        String jailWorld = jail.getWorldName();
+                        String currentWorld = player.getWorld().getName();
+
+                        if (jailWorld.equals(currentWorld)) {
+                            plugin.getScoreboardManager().showJailScoreboard(player, jailData);
+                        } else {
+                            plugin.getScoreboardManager().hideJailScoreboard(player);
+                        }
+                    }
+                }
             }
         }
     }
+
 }

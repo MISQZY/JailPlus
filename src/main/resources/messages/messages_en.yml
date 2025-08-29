@@ -141,3 +141,28 @@ admin:
   help-logs: "&f/jailadmin logs [filter] &7- View action logs"
   help-stats: "&f/jailadmin stats [player] &7- View statistics"
   help-placeholders: "&f/jailadmin placeholders &7- List available placeholders"
+
+# ===================================
+# Scoreboard messages for prisoners
+# ===================================
+scoreboard:
+  # Title of the scoreboard (max 32 chars)
+  title: "&c&l⚡ JAILED ⚡"
+
+  # Scoreboard lines (support placeholders and formatting)
+  time-line: "&fTime: &a{0}"
+  time-line-urgent: "&fTime: &c&l{0}"
+  time-line-permanent: "&fTime: &4&lPERMANENT"
+
+  reason-line: "&fReason: &e{0}"
+  jail-line: "&fPrison: &6{0}"
+  jailed-by-line: "&fBy: &d{0}"
+  progress-line: "&fDone: &b{0}%"
+
+  # Separators and decorations
+  separator: "&8&m─────────────"
+
+  # Special messages for scoreboard
+  remaining: "&7Remaining"
+  expired: "&c&lEXPIRED"
+  almost-done: "&a&lALMOST FREE!"

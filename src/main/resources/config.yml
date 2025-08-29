@@ -82,7 +82,7 @@ prevent-damage-to-prisoners: true
 # ===================================
 
 # Enable logging system
-enable-logging: true
+enable-logging: false
 
 # Maximum number of logs
 # use 0 to disable limit
@@ -90,6 +90,27 @@ max-log-entries: 100
 
 # Enable player statistics
 enable-statistics: true
+
+
+scoreboard:
+  # Enable scoreboard for prisoners
+  enabled: true
+
+  # scoreboard update cooldown (in ticks)
+  update-interval: 60
+
+  # Show who jail player
+  show-jailed-by: false
+
+  # Show extra info (jail percent etc.)
+  show-extra-info: false
+
+  # Auto hide on release
+  auto-hide-on-release: true
+
+  # Show scoreboard only in jail world
+  only-in-jail-world: false
+
 
 # ===================================
 # Effects and sounds

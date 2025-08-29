@@ -23,6 +23,7 @@ public final class JailPlus extends JavaPlugin {
     private PlaceholderManager placeholderManager;
     private StatisticsManager statisticsManager;
     private LogManager logManager;
+    private ScoreboardManager scoreboardManager;
 
     private long startupTime;
 
@@ -77,6 +78,10 @@ public final class JailPlus extends JavaPlugin {
                 logManager.shutdown();
             }
 
+            if (scoreboardManager != null) {
+                scoreboardManager.shutdown();
+            }
+
             getLogger().info("JailPlus successfully disabled!");
 
         } catch (Exception e) {
@@ -120,6 +125,15 @@ public final class JailPlus extends JavaPlugin {
                 getLogger().warning("Can't get access to  LogManager: " + e.getMessage());
             }
 
+            try {
+                if (configManager.isScoreboardEnabled()) {
+                    scoreboardManager = new ScoreboardManager(this);
+                    getLogger().fine("ScoreboardManager initialized");
+                }
+            } catch (Exception e) {
+                getLogger().warning("Can't get access to ScoreboardManager: " + e.getMessage());
+            }
+
             getLogger().fine("All managers successfully initialized!");
             return true;
 
@@ -150,7 +164,7 @@ public final class JailPlus extends JavaPlugin {
     private void registerListeners() {
         try {
             getServer().getPluginManager().registerEvents(
-                    new PlayerListener(jailManager, localizationManager, configManager), this
+                    new PlayerListener(this, jailManager, localizationManager, configManager), this
             );
             getLogger().fine("Event handlers registered");
         } catch (Exception e) {
@@ -170,6 +184,10 @@ public final class JailPlus extends JavaPlugin {
                 jailManager.saveAllData();
             }
 
+            if (scoreboardManager != null) {
+                scoreboardManager.shutdown();
+            }
+
             // Reload configurations
             configManager.reloadConfig();
             localizationManager.reloadMessages();
@@ -182,6 +200,14 @@ public final class JailPlus extends JavaPlugin {
 
             if (statisticsManager != null) {
                 statisticsManager.reload();
+            }
+
+            if (configManager.isScoreboardEnabled()) {
+                scoreboardManager = new ScoreboardManager(this);
+                getLogger().fine("ScoreboardManager recreated");
+            } else {
+                scoreboardManager = null;
+                getLogger().fine("ScoreboardManager disabled");
             }
 
             long reloadTime = System.currentTimeMillis() - reloadStart;
@@ -224,6 +250,13 @@ public final class JailPlus extends JavaPlugin {
             getLogger().fine("Logging: Enabled");
         }
 
+        if (scoreboardManager != null) {
+            getLogger().fine("Scoreboard: Enabled (updating every " +
+                    (configManager.getScoreboardUpdateInterval() / 20) + "s)");
+        } else {
+            getLogger().fine("Scoreboard: Disabled");
+        }
+
         getLogger().info("JailPlus successfully enabled! (took " + startupDuration + "ms)");
     }
 
@@ -254,5 +287,9 @@ public final class JailPlus extends JavaPlugin {
 
     public LogManager getLogManager() {
         return logManager;
+    }
+
+    public ScoreboardManager getScoreboardManager() {
+        return scoreboardManager;
     }
 }

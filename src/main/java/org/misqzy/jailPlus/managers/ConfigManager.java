@@ -22,6 +22,7 @@ public class ConfigManager {
     private static final boolean DEFAULT_ENABLE_STATISTICS = true;
     private static final boolean DEFAULT_ENABLE_LOGGING = true;
     private static final boolean DEFAULT_ENABLE_PLACEHOLDERAPI = true;
+    private static final boolean DEFAULT_ENABLE_SCOREBOARD = true;
 
     public ConfigManager(JailPlus plugin) {
         this.plugin = plugin;
@@ -94,6 +95,14 @@ public class ConfigManager {
         config.addDefault("enable-placeholderapi", DEFAULT_ENABLE_PLACEHOLDERAPI);
         config.addDefault("cache-placeholders", true);
         config.addDefault("placeholder-cache-time", 5000);
+
+        // Scoreboard settings
+        config.addDefault("scoreboard.enabled", DEFAULT_ENABLE_SCOREBOARD);
+        config.addDefault("scoreboard.update-interval", 60L);
+        config.addDefault("scoreboard.show-jailed-by", false);
+        config.addDefault("scoreboard.show-extra-info", true);
+        config.addDefault("scoreboard.auto-hide-on-release", true);
+        config.addDefault("scoreboard.only-in-jail-world", false);
 
         config.options().copyDefaults(true);
     }
@@ -287,6 +296,31 @@ public class ConfigManager {
     public long getPlaceholderCacheTime() {
         return config.getLong("placeholder-cache-time", 5000);
     }
+
+    public boolean isScoreboardEnabled() {
+        return config.getBoolean("scoreboard.enabled", DEFAULT_ENABLE_SCOREBOARD);
+    }
+
+    public long getScoreboardUpdateInterval() {
+        return config.getLong("scoreboard.update-interval", 60L);
+    }
+
+    public boolean isScoreboardShowJailedBy() {
+        return config.getBoolean("scoreboard.show-jailed-by", false);
+    }
+
+    public boolean isScoreboardShowExtraInfo() {
+        return config.getBoolean("scoreboard.show-extra-info", true);
+    }
+
+    public boolean isScoreboardAutoHideOnRelease() {
+        return config.getBoolean("scoreboard.auto-hide-on-release", true);
+    }
+
+    public boolean isScoreboardOnlyInJailWorld() {
+        return config.getBoolean("scoreboard.only-in-jail-world", false);
+    }
+
 
     public FileConfiguration getConfig() {
         return config;

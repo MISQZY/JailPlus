@@ -121,3 +121,24 @@ admin:
   help-logs: "&f/jailadmin logs [фильтр] &7- Просмотр логов"
   help-stats: "&f/jailadmin stats [игрок] &7- Просмотр статистики"
   help-placeholders: "&f/jailadmin placeholders &7- Список доступных плейсхолдеров"
+
+# ===================================
+# Сообщения для Scoreboard заключенных
+# ===================================
+scoreboard:
+  title: "&c&l⚡ ЗАКЛЮЧЕН ⚡"
+
+  time-line: "&fВремя: &a{0}"
+  time-line-urgent: "&fВремя: &c&l{0}"
+  time-line-permanent: "&fВремя: &4&lНАВСЕГДА"
+
+  reason-line: "&fПричина: &e{0}"
+  jail-line: "&fТюрьма: &6{0}"
+  jailed-by-line: "&fЗаключил: &d{0}"
+  progress-line: "&fВыполнено: &b{0}%"
+
+  separator: "&8&m─────────────"
+
+  remaining: "&7Осталось"
+  expired: "&c&lИСТЕКЛО"
+  almost-done: "&a&lСКОРО СВОБОДА!"

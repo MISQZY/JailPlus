@@ -267,6 +267,10 @@ public class JailManager {
                 jailName, TimeUtils.formatTime(time), reason);
 
 
+        if (plugin.getScoreboardManager() != null) {
+            plugin.getScoreboardManager().showJailScoreboard(player, jailData);
+        }
+
         if (plugin.getStatisticsManager() != null) {
             plugin.getStatisticsManager().addJailRecord(player.getUniqueId(), time, reason);
         }
@@ -289,6 +293,10 @@ public class JailManager {
 
         Player player = Bukkit.getPlayer(playerUuid);
         if (player != null && player.isOnline()) {
+            if (plugin.getScoreboardManager() != null && configManager.isScoreboardAutoHideOnRelease()) {
+                plugin.getScoreboardManager().hideJailScoreboard(player);
+            }
+
             Location returnLocation = jailData.getPreviousLocation();
             if (returnLocation != null && validateLocation(returnLocation)) {
                 player.teleport(returnLocation);
