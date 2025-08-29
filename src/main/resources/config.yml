@@ -99,16 +99,17 @@ enable-statistics: true
 enable-sounds: true
 
 # Sound when concluding
-jail-sound: "ENTITY_IRON_GOLEM_ATTACK"
+jail-sound: "entity.iron_golem.attack"
 
 # Sound when released
-unjail-sound: "ENTITY_PLAYER_LEVELUP"
+unjail-sound: "entity.player.levelup"
 
 # Enable particle effects
 enable-particles: true
 
 # Particles around prisoners
-prisoner-particle: "SMOKE_NORMAL"
+# All particle types: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
+prisoner-particle: "WAX_ON"
 
 # ===================================
 # Database (experimental)

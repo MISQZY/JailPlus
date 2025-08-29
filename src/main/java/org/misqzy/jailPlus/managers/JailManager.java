@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
 public class JailManager {
@@ -245,7 +246,10 @@ public class JailManager {
         if (configManager.isSoundsEnabled()) {
             try {
                 Sound sound = Registry.SOUNDS.get(NamespacedKey.minecraft(configManager.getJailSound().toLowerCase()));
-                player.playSound(player.getLocation(), sound, 1.0f, 1.0f);
+                if (sound != null)
+                    {
+                        player.playSound(player.getLocation(), sound, 1.0f, 1.0f);
+                    }
             } catch (IllegalArgumentException e) {
                 plugin.getLogger().warning("Invalid jail sound: " + configManager.getJailSound());
             }
@@ -297,11 +301,37 @@ public class JailManager {
             if (configManager.isSoundsEnabled()) {
                 try {
                     Sound sound = Registry.SOUNDS.get(NamespacedKey.minecraft(configManager.getUnjailSound().toLowerCase()));
-                    player.playSound(player.getLocation(), sound, 1.0f, 1.0f);
+                    if (sound != null) {
+                        player.playSound(player.getLocation(), sound, 1.0f, 1.0f);
+                    }
                 } catch (IllegalArgumentException e) {
                     plugin.getLogger().warning("Invalid unjail sound: " + configManager.getUnjailSound());
                 }
             }
+
+            if (configManager.isParticlesEnabled()) {
+                Particle particle = null;
+
+                try {
+                    particle = Particle.valueOf(configManager.getPrisonerParticle().toUpperCase(Locale.ROOT));
+                } catch (IllegalArgumentException e) {
+                    plugin.getLogger().warning("Invalid particle type: " + configManager.getPrisonerParticle());
+                }
+
+                if (particle != null) {
+                    Location location = player.getLocation();
+                    int minParticleCount = 5;
+                    int maxParticleCount = 12;
+
+                    int randomParticleCount = ThreadLocalRandom.current().nextInt(minParticleCount, maxParticleCount + 1);
+                    player.spawnParticle(particle,
+                            player.getLocation(),
+                            randomParticleCount,
+                            1.0,1.0,1.0,
+                            0.0);
+                }
+            }
+
 
             localizationManager.sendMessage(player, "jail.unjailed");
 
